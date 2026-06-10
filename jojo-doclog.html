@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>產學合作寄送記錄 — 叙叙集思</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary: #14351F;
+      --primary-hover: #0E2616;
+      --accent: #B8926A;
+      --accent-hover: #A07B55;
+      --accent-light: #F2ECE1;
+      --bg: #FAF8F5;
+      --card: #FFFDF9;
+      --border: #E2DDD5;
+      --text: #1E2D24;
+      --text-muted: #5C6E62;
+      --danger: #9B2C2C;
+      --danger-hover: #7B2121;
+      --danger-light: #FCE8E6;
+      --success: #137333;
+      --success-light: #E6F4EA;
+      --warn-bg: #FEF3C7;
+      --warn-text: #92400E;
+    }
+
+    body {
+      font-family: 'Outfit', 'Noto Sans TC', -apple-system, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    /* Loading bar */
+    #loading-bar {
+      position: fixed; top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, var(--accent) 0%, #e8c99e 50%, var(--accent) 100%);
+      background-size: 200% 100%;
+      animation: shimmer 1.2s ease-in-out infinite;
+      z-index: 9999; display: none;
+    }
+    @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+    /* Password screen */
+    #pwd-screen {
+      position: fixed; inset: 0;
+      background: var(--primary);
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
+      z-index: 9999; gap: 0;
+    }
+    .pwd-box {
+      background: var(--card);
+      border-radius: 16px;
+      padding: 40px 36px;
+      width: 90%; max-width: 380px;
+      text-align: center;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.3);
+    }
+    .pwd-logo { font-size: 36px; margin-bottom: 12px; }
+    .pwd-title { font-size: 18px; font-weight: 700; color: var(--primary); margin-bottom: 4px; }
+    .pwd-sub { font-size: 12px; color: var(--text-muted); margin-bottom: 24px; }
+    .pwd-input {
+      width: 100%; padding: 12px 16px; font-size: 16px;
+      border: 1px solid var(--border); border-radius: 10px;
+      font-family: inherit; color: var(--text); text-align: center;
+      letter-spacing: 0.15em; margin-bottom: 12px;
+    }
+    .pwd-input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(184,146,106,0.2); }
+    .pwd-btn {
+      width: 100%; padding: 12px; font-size: 14px; font-weight: 700;
+      background: var(--primary); color: white; border: none; border-radius: 10px;
+      cursor: pointer; font-family: inherit; transition: background 0.2s;
+    }
+    .pwd-btn:hover { background: var(--primary-hover); }
+    .pwd-error {
+      font-size: 12px; color: var(--danger); margin-top: 10px;
+      display: none;
+    }
+
+    header {
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 24px;
+      position: sticky;
+      top: 0;
+      z-index: 90;
+      box-shadow: 0 2px 12px rgba(44,36,22,0.02);
+    }
+
+    .header-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .logo-icon { font-size: 26px; }
+    .brand-title { font-size: 18px; font-weight: 700; color: var(--primary); letter-spacing: 0.02em; }
+    .brand-sub { font-size: 11px; color: var(--text-muted); font-weight: 500; margin-top: 2px; }
+    .header-actions { display: flex; gap: 10px; }
+
+    main { max-width: 1000px; margin: 0 auto; padding: 24px 16px 64px; }
+
+    .card {
+      background: var(--card);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      box-shadow: 0 4px 16px rgba(44,36,22,0.02);
+      margin-bottom: 24px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .card-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      user-select: none;
+      background: rgba(242,236,225,0.15);
+    }
+
+    .card-header h2 { font-size: 14px; font-weight: 700; color: var(--primary); display: flex; align-items: center; gap: 6px; }
+    .toggle-icon { color: var(--accent); font-size: 14px; transition: transform 0.25s; }
+    .card.collapsed .toggle-icon { transform: rotate(-90deg); }
+    .card.collapsed .card-body { display: none; }
+    .card-body { padding: 24px; }
+
+    .form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    @media (max-width: 680px) { .form-grid { grid-template-columns: 1fr; } }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-group.full { grid-column: 1 / -1; }
+
+    label { font-size: 12px; font-weight: 700; color: var(--primary); letter-spacing: 0.02em; }
+    label .req { color: var(--danger); margin-left: 2px; }
+
+    input, select, textarea {
+      font-family: inherit;
+      font-size: 14px;
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      background: white;
+      transition: all 0.2s ease;
+      width: 100%;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(184,146,106,0.15);
+      background: var(--card);
+    }
+
+    textarea { resize: vertical; min-height: 80px; line-height: 1.5; }
+
+    .dropzone {
+      border: 2px dashed var(--border);
+      border-radius: 8px;
+      padding: 24px;
+      text-align: center;
+      background: rgba(242,236,225,0.15);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .dropzone:hover, .dropzone.dragover { border-color: var(--accent); background: rgba(184,146,106,0.05); }
+    .dropzone-icon { font-size: 24px; color: var(--accent); margin-bottom: 6px; }
+    .dropzone-text { font-size: 12px; color: var(--text-muted); }
+    .dropzone-text span { color: var(--accent); font-weight: 700; text-decoration: underline; }
+
+    .form-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+    }
+
+    .btn {
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 9px 20px;
+      border-radius: 8px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none !important; }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary:hover:not(:disabled) { background: var(--primary-hover); transform: translateY(-1px); }
+    .btn-ghost { background: transparent; color: var(--primary); border: 1px solid var(--border); }
+    .btn-ghost:hover { background: var(--accent-light); border-color: var(--accent); }
+    .btn-accent { background: var(--accent); color: white; }
+    .btn-accent:hover:not(:disabled) { background: var(--accent-hover); transform: translateY(-1px); }
+    .btn-export { background: var(--accent-light); color: #8C6A48; border: 1px solid var(--border); }
+    .btn-export:hover { background: var(--accent); color: white; border-color: var(--accent); }
+    .btn-del {
+      font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 6px;
+      background: transparent; color: var(--danger); border: 1px solid var(--border);
+      cursor: pointer; transition: all 0.2s ease;
+    }
+    .btn-del:hover { background: var(--danger-light); border-color: #E2B2B0; }
+    .btn-email {
+      font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 6px;
+      background: var(--accent-light); color: #8C6A48; border: 1px solid var(--border);
+      cursor: pointer; transition: all 0.2s ease;
+      display: inline-flex; align-items: center; gap: 4px;
+    }
+    .btn-email:hover { background: var(--accent); color: white; border-color: var(--accent); }
+    .btn-owa {
+      font-family: inherit; font-size: 13px; font-weight: 600; padding: 9px 20px;
+      border-radius: 8px; border: 1px solid transparent; cursor: pointer;
+      transition: all 0.2s ease; background: #1A3A5C; color: white;
+    }
+    .btn-owa:hover { background: #122844; transform: translateY(-1px); }
+
+    .search-row { display: flex; gap: 12px; flex-wrap: wrap; }
+    .search-input-wrapper { position: relative; flex: 1; min-width: 200px; }
+    .search-input-wrapper input { padding-left: 36px; }
+    .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 14px; pointer-events: none; }
+    .search-row select { min-width: 160px; width: auto; flex-shrink: 0; }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .stat-box {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px;
+      text-align: center;
+    }
+    .stat-box.warn { border-color: #F6AD55; background: #FFFBF0; }
+    .stat-val { font-size: 22px; font-weight: 700; color: var(--primary); }
+    .stat-box.warn .stat-val { color: var(--warn-text); }
+    .stat-label { font-size: 11px; color: var(--text-muted); font-weight: 700; margin-top: 4px; }
+
+    .records { display: flex; flex-direction: column; gap: 16px; }
+
+    .rec {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.25s ease;
+    }
+    .rec:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(44,36,22,0.05); border-color: var(--accent); }
+
+    .rec-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 12px; }
+    .rec-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+
+    .tag { font-size: 11px; font-weight: 600; padding: 4px 8px; border-radius: 6px; white-space: nowrap; }
+    .tag-date   { background: #FAF8F5; border: 1px solid var(--border); color: var(--text); }
+    .tag-type   { background: var(--success-light); color: var(--success); }
+    .tag-method { background: var(--accent-light); color: #8C6A48; }
+    .tag-seal-none    { background: #EDF2F7; color: #4A5568; }
+    .tag-seal-pending { background: var(--warn-bg); color: var(--warn-text); }
+    .tag-seal-done    { background: var(--success-light); color: var(--success); }
+
+    .rec-vendor { font-size: 17px; font-weight: 700; color: var(--primary); margin-bottom: 4px; }
+    .rec-contact-row {
+      font-size: 12px; color: var(--text-muted);
+      display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; align-items: center;
+    }
+    .contact-item { display: inline-flex; align-items: center; gap: 4px; }
+
+    .rec-summary {
+      font-size: 13.5px; line-height: 1.6;
+      background: #FAF8F5; padding: 12px; border-radius: 8px;
+      border-left: 3px solid var(--accent); margin-bottom: 12px;
+      white-space: pre-wrap;
+    }
+
+    .rec-details-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 8px; font-size: 12px; color: var(--text-muted);
+      border-top: 1px solid var(--border);
+      padding-top: 12px; margin-top: 8px;
+    }
+    .detail-item { display: flex; align-items: baseline; gap: 6px; }
+    .detail-label { font-weight: 700; color: var(--primary); flex-shrink: 0; }
+    .detail-val { word-break: break-all; }
+
+    .rec-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 12px; }
+
+    .empty {
+      text-align: center; padding: 64px 24px; color: var(--text-muted);
+      background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+    }
+    .empty .icon { font-size: 40px; margin-bottom: 12px; }
+    .empty p { font-size: 14px; font-weight: 500; }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(20,53,31,0.4); backdrop-filter: blur(4px);
+      display: flex; justify-content: center; align-items: center;
+      z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.25s ease;
+    }
+    .modal-overlay.active { opacity: 1; pointer-events: auto; }
+    .modal-container {
+      background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+      width: 90%; max-width: 600px; max-height: 85vh; overflow-y: auto;
+      box-shadow: 0 12px 36px rgba(44,36,22,0.08); padding: 24px;
+      transform: scale(0.95); transition: transform 0.25s ease;
+    }
+    .modal-overlay.active .modal-container { transform: scale(1); }
+    .modal-header {
+      display: flex; justify-content: space-between; align-items: center;
+      border-bottom: 1px solid var(--border); padding-bottom: 12px; margin-bottom: 16px;
+    }
+    .modal-header h3 { font-size: 15px; font-weight: 700; color: var(--primary); }
+    .modal-close { background: none; border: none; font-size: 22px; cursor: pointer; color: var(--text-muted); line-height: 1; }
+    .modal-body { margin-bottom: 20px; }
+
+    .presets-ul {
+      list-style: none; max-height: 280px; overflow-y: auto;
+      border: 1px solid var(--border); border-radius: 8px; background: white;
+    }
+    .presets-ul li {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 10px 12px; border-bottom: 1px solid #FAF8F5;
+    }
+    .presets-ul li:last-child { border-bottom: none; }
+    .presets-ul .preset-label { font-size: 13px; color: var(--text); font-weight: 500; }
+    .presets-ul .preset-sub { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+    .add-preset-grid {
+      display: grid; grid-template-columns: 1fr 1fr auto;
+      gap: 8px; margin-bottom: 16px; align-items: end;
+    }
+    @media (max-width: 480px) { .add-preset-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+<div id="loading-bar"></div>
+
+<!-- 密碼鎖畫面 -->
+<div id="pwd-screen">
+  <div class="pwd-box">
+    <div class="pwd-logo">📬</div>
+    <div class="pwd-title">產學合作寄送記錄</div>
+    <div class="pwd-sub">叙叙集思有限公司</div>
+    <form onsubmit="checkPassword(event)">
+      <input class="pwd-input" id="pwd_input" type="password" placeholder="請輸入密碼" autocomplete="current-password">
+      <button class="pwd-btn" type="submit">進入</button>
+      <div class="pwd-error" id="pwd_error">密碼錯誤，請再試一次</div>
+    </form>
+  </div>
+</div>
+
+<header>
+  <div class="header-container">
+    <div class="brand">
+      <div class="logo-icon">📬</div>
+      <div>
+        <h1 class="brand-title">產學合作寄送記錄</h1>
+        <div class="brand-sub">叙叙集思有限公司 JOJO SERENDIPITY LTD.</div>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-ghost" onclick="openModal('vendorModal')">🏢 常用廠商／窗口</button>
+      <button class="btn btn-export" onclick="exportCSV()">↓ 匯出 CSV</button>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <!-- 新增表單 -->
+  <div class="card" id="formCard">
+    <div class="card-header" onclick="toggleForm()">
+      <h2>＋ 新增寄送記錄</h2>
+      <span class="toggle-icon">▼</span>
+    </div>
+    <div class="card-body">
+      <form id="form" onsubmit="save(event)">
+        <div class="form-grid">
+
+          <div class="form-group">
+            <label>📅 日期 <span class="req">*</span></label>
+            <input type="date" id="f_date" required>
+          </div>
+
+          <div class="form-group">
+            <label>🕐 時間</label>
+            <input type="time" id="f_time">
+          </div>
+
+          <div class="form-group full">
+            <label>🏢 廠商 ／ 窗口 <span class="req">*</span></label>
+            <input type="text" id="f_vendor" list="vendor-options"
+              placeholder="選擇或輸入，例：台泥股份有限公司 ／ 王主任" required autocomplete="off">
+            <datalist id="vendor-options"></datalist>
+          </div>
+
+          <div class="form-group">
+            <label>✉️ 窗口 Email <span class="req">*</span></label>
+            <input type="email" id="f_email" placeholder="例：service@company.com" required>
+          </div>
+
+          <div class="form-group">
+            <label>📞 窗口電話</label>
+            <input type="tel" id="f_phone" placeholder="例：04-23590121 分機 1234">
+          </div>
+
+          <div class="form-group">
+            <label>📂 文件類型</label>
+            <select id="f_type">
+              <option value="">請選擇</option>
+              <option>合約</option>
+              <option>領據</option>
+              <option>協議書</option>
+              <option>報告書</option>
+              <option>授權書</option>
+              <option>其他</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>📦 寄送方式</label>
+            <select id="f_method">
+              <option value="">請選擇</option>
+              <option>Email</option>
+              <option>掛號郵寄</option>
+              <option>快遞</option>
+              <option>LINE 傳送</option>
+              <option>親交</option>
+            </select>
+          </div>
+
+          <div class="form-group full">
+            <label>📋 寄送摘要 <span class="req">*</span></label>
+            <textarea id="f_summary" placeholder="例：2025 年度產學合作合約正本及領據各一份" required></textarea>
+          </div>
+
+          <div class="form-group">
+            <label>📮 郵件 ／ 追蹤編號</label>
+            <input type="text" id="f_trackno" placeholder="例：掛號號碼、快遞單號">
+          </div>
+
+          <div class="form-group">
+            <label>🔏 對方用印狀態</label>
+            <select id="f_seal">
+              <option>無需對方用印</option>
+              <option>待用印</option>
+              <option>已用印</option>
+            </select>
+          </div>
+
+          <div class="form-group full">
+            <label>📎 附件名稱（可手動輸入或直接拖曳檔案至下方）</label>
+            <input type="text" id="f_files" placeholder="例：合約書正本.pdf, 領據.pdf" style="margin-bottom: 8px;">
+            <div class="dropzone" id="upload_zone">
+              <div class="dropzone-icon">📤</div>
+              <div class="dropzone-text">拖曳本機檔案至此處，或<span>點擊瀏覽檔案</span>來快速填入檔名</div>
+              <input type="file" id="f_file_picker" multiple style="display: none;">
+            </div>
+          </div>
+
+          <div class="form-group full">
+            <label>📝 備註</label>
+            <textarea id="f_notes" placeholder="其他補充..." style="min-height:60px"></textarea>
+          </div>
+
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn btn-ghost" onclick="resetForm()">清除</button>
+          <button type="submit" id="btn-save" class="btn btn-primary">儲存記錄</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 搜尋篩選 -->
+  <div class="card">
+    <div class="card-body">
+      <div class="search-row">
+        <div class="search-input-wrapper">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="q" placeholder="搜尋廠商、窗口、Email、摘要、編號…" oninput="render()">
+        </div>
+        <select id="ft" onchange="render()">
+          <option value="">所有文件類型</option>
+          <option>合約</option>
+          <option>領據</option>
+          <option>協議書</option>
+          <option>報告書</option>
+          <option>授權書</option>
+          <option>其他</option>
+        </select>
+        <select id="fs" onchange="render()">
+          <option value="">所有用印狀態</option>
+          <option>待用印</option>
+          <option>已用印</option>
+          <option>無需對方用印</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div id="stats" class="stats"></div>
+  <div class="records" id="list"></div>
+
+</main>
+
+<!-- 常用廠商／窗口管理彈窗 -->
+<div class="modal-overlay" id="vendorModal">
+  <div class="modal-container" style="max-width: 500px;">
+    <div class="modal-header">
+      <h3>🏢 常用廠商／窗口管理</h3>
+      <button class="modal-close" onclick="closeModal('vendorModal')">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:12px;">
+        <div>
+          <label style="display:block; margin-bottom:4px;">廠商名稱 <span style="color:var(--danger)">*</span></label>
+          <input type="text" id="new_company" placeholder="例：台泥股份有限公司">
+        </div>
+        <div>
+          <label style="display:block; margin-bottom:4px;">窗口姓名（可留空）</label>
+          <input type="text" id="new_contact" placeholder="例：王主任">
+        </div>
+        <div>
+          <label style="display:block; margin-bottom:4px;">窗口 Email</label>
+          <input type="email" id="new_email" placeholder="例：service@company.com">
+        </div>
+        <div>
+          <label style="display:block; margin-bottom:4px;">窗口電話</label>
+          <input type="tel" id="new_phone" placeholder="例：04-23590121">
+        </div>
+      </div>
+      <button class="btn btn-primary" onclick="addVendorPreset()" style="width:100%; margin-bottom:16px;">＋ 新增廠商／窗口</button>
+      <div style="margin-bottom: 8px;"><label>現有清單</label></div>
+      <ul class="presets-ul" id="vendor_presets_list"></ul>
+    </div>
+    <div class="form-actions" style="margin-top: 16px; border-top: none; padding-top: 0;">
+      <button type="button" class="btn btn-ghost" onclick="resetDefaultVendors()" style="margin-right: auto; color: var(--danger); font-size: 12px;">重設為預設</button>
+      <button type="button" class="btn btn-primary" onclick="closeModal('vendorModal')">關閉</button>
+    </div>
+  </div>
+</div>
+
+<!-- Email 彈窗 -->
+<div class="modal-overlay" id="emailModal">
+  <div class="modal-container">
+    <div class="modal-header">
+      <h3>✉️ 寄送 Email 通知</h3>
+      <button class="modal-close" onclick="closeModal('emailModal')">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group" style="margin-bottom: 12px;">
+        <label>收件窗口 Email</label>
+        <input type="email" id="m_email_to" placeholder="窗口 Email">
+      </div>
+      <div class="form-group" style="margin-bottom: 12px;">
+        <label>信件主旨</label>
+        <input type="text" id="m_email_subject" placeholder="信件主旨">
+      </div>
+      <div class="form-group">
+        <label>信件內容（可直接修改）</label>
+        <textarea id="m_email_body" style="min-height: 250px; font-family: inherit; font-size: 13.5px;"></textarea>
+      </div>
+    </div>
+    <div class="form-actions" style="margin-top: 16px; border-top: none; padding-top: 0; flex-wrap: wrap;">
+      <button type="button" class="btn btn-ghost" onclick="closeModal('emailModal')">取消</button>
+      <button type="button" class="btn btn-accent" onclick="copyEmailContent()">📋 複製信件內容</button>
+      <button type="button" class="btn btn-owa" onclick="openOWA()">🏫 開啟東海信箱</button>
+      <button type="button" class="btn btn-primary" onclick="triggerMailto()">✉️ 開啟郵件軟體</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ── 密碼設定（可自行修改）────────────────────────────────
+  const PASSWORD = 'jojo2026';
+
+  function checkPassword(e) {
+    e.preventDefault();
+    if (document.getElementById('pwd_input').value === PASSWORD) {
+      sessionStorage.setItem('doclog_ok', '1');
+      document.getElementById('pwd-screen').style.display = 'none';
+      initDefaults();
+      loadAll();
+    } else {
+      document.getElementById('pwd_error').style.display = 'block';
+      document.getElementById('pwd_input').value = '';
+      document.getElementById('pwd_input').focus();
+    }
+  }
+
+  // ── API 設定 ──────────────────────────────────────────
+  const API_URL = 'https://script.google.com/macros/s/AKfycbzhOXb4cioOgtev7Il8ai_PMTPqtgar8nDIYcAMcSMPbv1QjxIrNk0tIc1o126Wl4U_/exec';
+
+  // ── 資料 ──────────────────────────────────────────────
+  let data = [];
+  let presets = [];
+
+  const DEFAULT_VENDORS = [
+    {company: "台泥股份有限公司",                    contact: ""},
+    {company: "台灣積體電路製造股份有限公司 (TSMC)", contact: ""},
+    {company: "友達光電股份有限公司",                contact: ""},
+    {company: "凱基證券股份有限公司",                contact: ""},
+    {company: "聯發科技股份有限公司",                contact: ""},
+    {company: "中華電信股份有限公司",                contact: ""},
+    {company: "鴻海精密工業股份有限公司",            contact: ""},
+    {company: "國立東海大學",                        contact: ""},
+    {company: "國立臺灣海洋大學",                    contact: ""},
+  ];
+
+  // ── API 呼叫 ────────────────────────────────────────────
+  async function apiGet(params) {
+    const url = API_URL + '?' + new URLSearchParams(params);
+    const r = await fetch(url);
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    return r.json();
+  }
+
+  async function apiPost(body) {
+    const r = await fetch(API_URL, {method: 'POST', body: JSON.stringify(body)});
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    return r.json();
+  }
+
+  // ── 載入 ────────────────────────────────────────────────
+  async function loadAll() {
+    setLoading(true);
+    try {
+      const [recs, pres] = await Promise.all([
+        apiGet({action: 'list'}),
+        apiGet({action: 'presets'})
+      ]);
+      data    = Array.isArray(recs) ? recs : [];
+      presets = (Array.isArray(pres) && pres.length) ? pres : DEFAULT_VENDORS;
+    } catch(e) {
+      document.getElementById('list').innerHTML = `<div class="empty">
+        <div class="icon">⚠️</div>
+        <p>無法連線到資料庫，請確認網路後重新整理。<br><small style="color:#aaa">${e.message}</small></p>
+      </div>`;
+      setLoading(false);
+      return;
+    }
+    setLoading(false);
+    renderVendorPresets();
+    render();
+  }
+
+  function setLoading(v) {
+    document.getElementById('loading-bar').style.display = v ? 'block' : 'none';
+  }
+
+  // ── 工具函式 ────────────────────────────────────────────
+  function formatVendor(company, contact) {
+    return contact ? company + ' ／ ' + contact : company;
+  }
+
+  function parseVendor(val) {
+    const sep = ' ／ ';
+    const idx = val.indexOf(sep);
+    if (idx === -1) return {company: val.trim(), contact: ''};
+    return {company: val.slice(0, idx).trim(), contact: val.slice(idx + sep.length).trim()};
+  }
+
+  function esc(s) {
+    return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  function sealTagClass(v) {
+    if (v === '待用印') return 'tag-seal-pending';
+    if (v === '已用印') return 'tag-seal-done';
+    return 'tag-seal-none';
+  }
+
+  // ── 表單 ────────────────────────────────────────────────
+  function initDefaults() {
+    const now = new Date();
+    document.getElementById('f_date').value =
+      now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0');
+    document.getElementById('f_time').value =
+      String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
+  }
+
+  function resetForm() {
+    document.getElementById('form').reset();
+    initDefaults();
+    document.getElementById('f_file_picker').value = '';
+  }
+
+  function toggleForm() { document.getElementById('formCard').classList.toggle('collapsed'); }
+
+  async function save(e) {
+    e.preventDefault();
+    const vendorRaw = document.getElementById('f_vendor').value.trim();
+    const {company, contact} = parseVendor(vendorRaw);
+    const rec = {
+      id:      Date.now().toString(),
+      date:    document.getElementById('f_date').value,
+      time:    document.getElementById('f_time').value,
+      company,
+      contact,
+      email:   document.getElementById('f_email').value.trim(),
+      phone:   document.getElementById('f_phone').value.trim(),
+      summary: document.getElementById('f_summary').value.trim(),
+      type:    document.getElementById('f_type').value,
+      method:  document.getElementById('f_method').value,
+      trackno: document.getElementById('f_trackno').value.trim(),
+      seal:    document.getElementById('f_seal').value,
+      files:   document.getElementById('f_files').value.trim(),
+      notes:   document.getElementById('f_notes').value.trim(),
+    };
+    const btn = document.getElementById('btn-save');
+    btn.disabled = true;
+    btn.textContent = '儲存中…';
+    try {
+      await apiPost({action: 'add', record: rec});
+      data.unshift(rec);
+      resetForm();
+      render();
+      document.getElementById('formCard').classList.add('collapsed');
+    } catch(err) {
+      alert('儲存失敗：' + err.message);
+    }
+    btn.disabled = false;
+    btn.textContent = '儲存記錄';
+  }
+
+  // ── 刪除 ────────────────────────────────────────────────
+  async function del(id) {
+    if (!confirm('確定要刪除這筆寄送記錄？')) return;
+    try {
+      await apiPost({action: 'delete', id});
+      data = data.filter(r => r.id !== id);
+      render();
+    } catch(err) {
+      alert('刪除失敗：' + err.message);
+    }
+  }
+
+  // ── 更新用印狀態（樂觀更新）────────────────────────────
+  async function updateSeal(id, val) {
+    const rec = data.find(r => r.id === id);
+    if (!rec) return;
+    const old = rec.seal;
+    rec.seal = val;
+    render();
+    try {
+      await apiPost({action: 'update', id, fields: {seal: val}});
+    } catch(err) {
+      rec.seal = old;
+      render();
+      alert('更新失敗：' + err.message);
+    }
+  }
+
+  // ── Vendor Presets ──────────────────────────────────────
+  function renderVendorPresets() {
+    const list = document.getElementById('vendor_presets_list');
+    if (!presets.length) {
+      list.innerHTML = '<li style="padding:16px; text-align:center; color:var(--text-muted); font-size:13px;">尚無常用廠商，請新增</li>';
+    } else {
+      list.innerHTML = presets.map((p, i) => `
+        <li>
+          <div>
+            <div class="preset-label">${esc(p.company)}${p.contact ? ' ／ ' + esc(p.contact) : ''}</div>
+            <div class="preset-sub" style="display:flex; gap:12px; flex-wrap:wrap;">
+              ${p.email ? `<span>✉️ ${esc(p.email)}</span>` : ''}
+              ${p.phone ? `<span>📞 ${esc(p.phone)}</span>` : ''}
+            </div>
+          </div>
+          <button class="btn-del" onclick="deleteVendorPreset(${i})">刪除</button>
+        </li>
+      `).join('');
+    }
+    const dl = document.getElementById('vendor-options');
+    dl.innerHTML = presets.map(p =>
+      `<option value="${esc(formatVendor(p.company, p.contact))}"></option>`
+    ).join('');
+  }
+
+  async function addVendorPreset() {
+    const company = document.getElementById('new_company').value.trim();
+    const contact = document.getElementById('new_contact').value.trim();
+    const email   = document.getElementById('new_email').value.trim();
+    const phone   = document.getElementById('new_phone').value.trim();
+    if (!company) { alert('請輸入廠商名稱'); return; }
+    const label = formatVendor(company, contact);
+    if (presets.some(p => formatVendor(p.company, p.contact) === label)) {
+      alert('此廠商／窗口組合已在清單中'); return;
+    }
+    presets.push({company, contact, email, phone});
+    document.getElementById('new_company').value = '';
+    document.getElementById('new_contact').value = '';
+    document.getElementById('new_email').value   = '';
+    document.getElementById('new_phone').value   = '';
+    renderVendorPresets();
+    await apiPost({action: 'savePresets', presets}).catch(e => console.error(e));
+  }
+
+  async function deleteVendorPreset(idx) {
+    const p = presets[idx];
+    if (!confirm(`確定要刪除「${formatVendor(p.company, p.contact)}」？`)) return;
+    presets.splice(idx, 1);
+    renderVendorPresets();
+    await apiPost({action: 'savePresets', presets}).catch(e => console.error(e));
+  }
+
+  async function resetDefaultVendors() {
+    if (!confirm('確定要重設為預設清單？')) return;
+    presets = DEFAULT_VENDORS;
+    renderVendorPresets();
+    await apiPost({action: 'savePresets', presets}).catch(e => console.error(e));
+  }
+
+  // ── 渲染記錄 ────────────────────────────────────────────
+  function render() {
+    const q  = document.getElementById('q').value.toLowerCase();
+    const ft = document.getElementById('ft').value;
+    const fs = document.getElementById('fs').value;
+
+    const filtered = data.filter(r => {
+      const matchQ = !q || [r.company, r.contact, r.email, r.phone, r.summary, r.trackno, r.notes, r.files]
+        .some(v => v && v.toLowerCase().includes(q));
+      return matchQ && (!ft || r.type === ft) && (!fs || r.seal === fs);
+    });
+
+    const now = new Date();
+    const thisMonth = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0');
+    const monthCount  = filtered.filter(r => r.date && r.date.startsWith(thisMonth)).length;
+    const pendingSeal = filtered.filter(r => r.seal === '待用印').length;
+    const mailCount   = filtered.filter(r => r.method === '掛號郵寄' || r.method === '快遞').length;
+
+    document.getElementById('stats').innerHTML = `
+      <div class="stat-box">
+        <div class="stat-val">${filtered.length}</div>
+        <div class="stat-label">總記錄數</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-val">${monthCount}</div>
+        <div class="stat-label">本月累計寄送</div>
+      </div>
+      <div class="stat-box${pendingSeal ? ' warn' : ''}">
+        <div class="stat-val">${pendingSeal}</div>
+        <div class="stat-label">⏳ 待對方用印</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-val">${mailCount}</div>
+        <div class="stat-label">郵寄／快遞筆數</div>
+      </div>
+    `;
+
+    if (!filtered.length) {
+      document.getElementById('list').innerHTML = `<div class="empty">
+        <div class="icon">📭</div>
+        <p>${data.length ? '找不到符合條件的記錄' : '目前尚無記錄，立即新增一筆吧！'}</p>
+      </div>`;
+      return;
+    }
+
+    document.getElementById('list').innerHTML = filtered.map(r => {
+      const vendorDisplay = formatVendor(r.company, r.contact);
+      const sealLabel = r.seal || '無需對方用印';
+
+      return `
+        <div class="rec">
+          <div class="rec-top">
+            <div class="rec-tags">
+              <span class="tag tag-date">📅 ${esc(r.date)}${r.time ? ' ' + r.time : ''}</span>
+              ${r.type   ? `<span class="tag tag-type">${esc(r.type)}</span>` : ''}
+              ${r.method ? `<span class="tag tag-method">${esc(r.method)}</span>` : ''}
+              <span class="tag ${sealTagClass(sealLabel)}">${esc(sealLabel)}</span>
+            </div>
+            <button class="btn-del" onclick="del('${r.id}')">刪除</button>
+          </div>
+          <div class="rec-vendor">${esc(vendorDisplay)}</div>
+          <div class="rec-contact-row">
+            ${r.email ? `<span class="contact-item">✉️ ${esc(r.email)}</span>` : ''}
+            ${r.phone ? `<span class="contact-item">📞 ${esc(r.phone)}</span>` : ''}
+            ${r.seal === '待用印' ? `
+              <span class="contact-item" style="margin-left:auto;">
+                <select onchange="updateSeal('${r.id}', this.value)"
+                  style="font-size:11px; padding:3px 8px; border-radius:6px; border:1px solid var(--border); background:white; cursor:pointer;">
+                  <option ${r.seal==='待用印'?'selected':''}>待用印</option>
+                  <option ${r.seal==='已用印'?'selected':''}>已用印</option>
+                  <option ${r.seal==='無需對方用印'?'selected':''}>無需對方用印</option>
+                </select>
+              </span>` : ''}
+          </div>
+          <div class="rec-summary">${esc(r.summary)}</div>
+          ${(r.trackno || r.files || r.notes) ? `
+          <div class="rec-details-grid">
+            ${r.trackno ? `<div class="detail-item"><span class="detail-label">📮 追蹤編號:</span><span class="detail-val">${esc(r.trackno)}</span></div>` : ''}
+            ${r.files   ? `<div class="detail-item"><span class="detail-label">📎 附件:</span><span class="detail-val">${esc(r.files)}</span></div>` : ''}
+            ${r.notes   ? `<div class="detail-item" style="grid-column:1/-1"><span class="detail-label">📝 備註:</span><span class="detail-val">${esc(r.notes)}</span></div>` : ''}
+          </div>` : ''}
+          <div class="rec-actions">
+            <button class="btn-email" onclick="openEmailModal('${r.id}')">✉️ 寄送通知信</button>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  // ── Email Modal ─────────────────────────────────────────
+  let activeEmailId = null;
+
+  function openEmailModal(id) {
+    const rec = data.find(r => r.id === id);
+    if (!rec) return;
+    activeEmailId = id;
+    document.getElementById('m_email_to').value = rec.email || '';
+    const filesStr = rec.files ? ` (${rec.files})` : '';
+    document.getElementById('m_email_subject').value = `【產學合作】寄送通知 - ${rec.type || '相關文件'}${filesStr}`;
+    const vendorDisplay = formatVendor(rec.company, rec.contact);
+    const dateStr = rec.date + (rec.time ? ' ' + rec.time : '');
+    document.getElementById('m_email_body').value =
+`${rec.contact ? rec.contact + ' 您好：' : '您好：'}
+
+此信件為產學合作文件寄送通知。
+
+本公司已於 ${dateStr} 透過 ${rec.method || '指定方式'} 寄出相關文件，明細如下：
+
+- 寄送對象：${vendorDisplay}
+- 文件類型：${rec.type || '文件'}
+- 寄送摘要：${rec.summary}
+${rec.trackno ? '- 郵件追蹤編號：' + rec.trackno : ''}
+${rec.files ? '- 附件檔案：' + rec.files : ''}
+${rec.notes ? '- 備註事項：' + rec.notes : ''}
+
+文件已安排寄出，請您留意收件。若有任何問題，歡迎隨時與我們聯絡，謝謝！
+
+祝 順心
+
+叙叙集思有限公司`;
+    openModal('emailModal');
+  }
+
+  function copyEmailContent() {
+    navigator.clipboard.writeText(document.getElementById('m_email_body').value)
+      .then(() => alert('郵件內容已複製到剪貼簿！'))
+      .catch(err => alert('複製失敗：' + err));
+  }
+
+  function triggerMailto() {
+    const to = document.getElementById('m_email_to').value.trim();
+    const subject = document.getElementById('m_email_subject').value;
+    const body = document.getElementById('m_email_body').value;
+    window.location.href = `mailto:${encodeURIComponent(to)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  }
+
+  function openOWA() {
+    const to = document.getElementById('m_email_to').value.trim();
+    const subject = document.getElementById('m_email_subject').value;
+    const body = document.getElementById('m_email_body').value;
+    navigator.clipboard.writeText(body).then(() => {
+      const params = new URLSearchParams({path: '/mail/action/compose', to, subject});
+      window.open('https://tmail.thu.edu.tw/owa/?' + params.toString(), '_blank');
+      alert('信件本文已自動複製到剪貼簿！\n\n進入東海信箱後，點擊信件本文欄位，按 Cmd+V（或 Ctrl+V）貼上即可。');
+    }).catch(() => {
+      const params = new URLSearchParams({path: '/mail/action/compose', to, subject});
+      window.open('https://tmail.thu.edu.tw/owa/?' + params.toString(), '_blank');
+      alert('東海信箱已開啟，請手動將信件本文複製後貼入。');
+    });
+  }
+
+  // ── Modal ────────────────────────────────────────────────
+  function openModal(id)  { document.getElementById(id).classList.add('active'); }
+  function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+
+  // ── 拖曳附件 ────────────────────────────────────────────
+  const dragZone   = document.getElementById('upload_zone');
+  const filePicker = document.getElementById('f_file_picker');
+  const filesInput = document.getElementById('f_files');
+
+  dragZone.addEventListener('click', () => filePicker.click());
+  dragZone.addEventListener('dragover',  e => { e.preventDefault(); dragZone.classList.add('dragover'); });
+  dragZone.addEventListener('dragleave', () => dragZone.classList.remove('dragover'));
+  dragZone.addEventListener('drop', e => {
+    e.preventDefault(); dragZone.classList.remove('dragover');
+    if (e.dataTransfer.files.length) handlePickedFiles(e.dataTransfer.files);
+  });
+  filePicker.addEventListener('change', () => {
+    if (filePicker.files.length) handlePickedFiles(filePicker.files);
+  });
+
+  function handlePickedFiles(files) {
+    const names = Array.from(files).map(f => f.name);
+    filesInput.value = filesInput.value.trim() ? filesInput.value + ', ' + names.join(', ') : names.join(', ');
+    const orig = dragZone.querySelector('.dropzone-text').innerHTML;
+    dragZone.querySelector('.dropzone-text').innerHTML =
+      `<span style="color:var(--success); font-weight:700;">已讀取 ${files.length} 個檔名</span>`;
+    setTimeout(() => { dragZone.querySelector('.dropzone-text').innerHTML = orig; }, 2500);
+  }
+
+  // ── CSV 匯出 ────────────────────────────────────────────
+  function exportCSV() {
+    const h = ['日期','時間','廠商','窗口','窗口Email','窗口電話','摘要','文件類型','寄送方式','追蹤編號','對方用印狀態','附件','備註'];
+    const rows = data.map(r => [
+      r.date, r.time, r.company, r.contact, r.email||'', r.phone||'', r.summary,
+      r.type, r.method, r.trackno||'', r.seal||'', r.files||'', r.notes||''
+    ].map(v => `"${(v||'').replace(/"/g,'""')}"`));
+    const csv = [h.join(','), ...rows.map(r => r.join(','))].join('\n');
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob(['﻿'+csv], {type:'text/csv;charset=utf-8;'}));
+    a.download = `產學寄送記錄_${new Date().toISOString().slice(0,10)}.csv`;
+    a.click();
+  }
+
+  // ── 選廠商自動帶入 email / 電話 ──────────────────────────
+  document.getElementById('f_vendor').addEventListener('input', function() {
+    const val = this.value.trim();
+    const preset = presets.find(p => formatVendor(p.company, p.contact) === val);
+    if (!preset) return;
+    if (preset.email) document.getElementById('f_email').value = preset.email;
+    if (preset.phone) document.getElementById('f_phone').value = preset.phone;
+  });
+
+  // ── 啟動 ────────────────────────────────────────────────
+  if (sessionStorage.getItem('doclog_ok') === '1') {
+    document.getElementById('pwd-screen').style.display = 'none';
+    initDefaults();
+    loadAll();
+  } else {
+    setTimeout(() => document.getElementById('pwd_input').focus(), 100);
+  }
+</script>
+</body>
+</html>
