@@ -579,6 +579,10 @@
         <input type="email" id="m_email_to" placeholder="窗口 Email">
       </div>
       <div class="form-group" style="margin-bottom: 12px;">
+        <label>副本 CC <span style="font-weight:400; color:var(--text-muted);">（選填，多人請用逗號分隔）</span></label>
+        <input type="text" id="m_email_cc" placeholder="例：cc1@company.com, cc2@company.com">
+      </div>
+      <div class="form-group" style="margin-bottom: 12px;">
         <label>信件主旨</label>
         <input type="text" id="m_email_subject" placeholder="信件主旨">
       </div>
@@ -918,11 +922,45 @@
             ${r.notes   ? `<div class="detail-item" style="grid-column:1/-1"><span class="detail-label">📝 備註:</span><span class="detail-val">${esc(r.notes)}</span></div>` : ''}
           </div>` : ''}
           <div class="rec-actions">
+            ${!r.trackno ? `<button class="btn-email" data-fill-btn="${r.id}" onclick="fillTrackno('${r.id}')">📮 補填單號</button>` : ''}
             <button class="btn-email" onclick="openEmailModal('${r.id}')">✉️ 寄送通知信</button>
           </div>
         </div>
       `;
     }).join('');
+  }
+
+  // ── 補填單號 ────────────────────────────────────────────
+  function fillTrackno(id) {
+    const btn = document.querySelector(`[data-fill-btn="${id}"]`);
+    if (!btn) return;
+    btn.replaceWith((() => {
+      const wrap = document.createElement('span');
+      wrap.style.cssText = 'display:inline-flex; gap:4px; align-items:center;';
+      wrap.innerHTML = `
+        <input id="fill_in_${id}" type="text" placeholder="輸入追蹤單號"
+          style="font-size:12px; padding:4px 8px; border:1px solid var(--border); border-radius:6px; width:160px;">
+        <button class="btn-email" onclick="confirmTrackno('${id}')">✔ 確認</button>
+        <button class="btn-ghost" onclick="render()" style="font-size:11px; padding:4px 8px; border-radius:6px;">取消</button>
+      `;
+      return wrap;
+    })());
+    document.getElementById(`fill_in_${id}`).focus();
+  }
+
+  async function confirmTrackno(id) {
+    const input = document.getElementById(`fill_in_${id}`);
+    const val = input ? input.value.trim() : '';
+    if (!val) { alert('請輸入追蹤單號'); return; }
+    const rec = data.find(r => r.id === id);
+    if (!rec) return;
+    try {
+      await apiPost({action: 'update', id, fields: {trackno: val}});
+      rec.trackno = val;
+      render();
+    } catch(err) {
+      alert('更新失敗：' + err.message);
+    }
   }
 
   // ── Email Modal ─────────────────────────────────────────
@@ -933,6 +971,7 @@
     if (!rec) return;
     activeEmailId = id;
     document.getElementById('m_email_to').value = rec.email || '';
+    document.getElementById('m_email_cc').value = '';
     const filesStr = rec.files ? ` (${rec.files})` : '';
     document.getElementById('m_email_subject').value = `【產學合作】寄送通知 - ${rec.type || '相關文件'}${filesStr}`;
     const vendorDisplay = formatVendor(rec.company, rec.contact);
@@ -967,21 +1006,26 @@ ${rec.notes ? '- 備註事項：' + rec.notes : ''}
 
   function triggerMailto() {
     const to = document.getElementById('m_email_to').value.trim();
+    const cc = document.getElementById('m_email_cc').value.trim();
     const subject = document.getElementById('m_email_subject').value;
     const body = document.getElementById('m_email_body').value;
-    window.location.href = `mailto:${encodeURIComponent(to)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    const ccPart = cc ? `cc=${encodeURIComponent(cc)}&` : '';
+    window.location.href = `mailto:${encodeURIComponent(to)}?${ccPart}subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   }
 
   function openOWA() {
     const to = document.getElementById('m_email_to').value.trim();
+    const cc = document.getElementById('m_email_cc').value.trim();
     const subject = document.getElementById('m_email_subject').value;
     const body = document.getElementById('m_email_body').value;
     navigator.clipboard.writeText(body).then(() => {
       const params = new URLSearchParams({path: '/mail/action/compose', to, subject});
+      if (cc) params.set('cc', cc);
       window.open('https://tmail.thu.edu.tw/owa/?' + params.toString(), '_blank');
       alert('信件本文已自動複製到剪貼簿！\n\n進入東海信箱後，點擊信件本文欄位，按 Cmd+V（或 Ctrl+V）貼上即可。');
     }).catch(() => {
       const params = new URLSearchParams({path: '/mail/action/compose', to, subject});
+      if (cc) params.set('cc', cc);
       window.open('https://tmail.thu.edu.tw/owa/?' + params.toString(), '_blank');
       alert('東海信箱已開啟，請手動將信件本文複製後貼入。');
     });
