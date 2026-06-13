@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>關於叙叙集思 — JOJO Impact Hub</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='12' fill='%231e2d4a'/><text x='50' y='72' font-size='58' text-anchor='middle' fill='white' font-family='sans-serif'>叙</text></svg>">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Noto Sans TC", "Hiragino Sans", sans-serif;
+      background: #fff;
+      color: #111;
+      line-height: 1.7;
+      font-weight: 300;
+    }
+
+    /* ── Header ── */
+    header {
+      background: #fff;
+      border-bottom: 1px solid #e8e8e8;
+      padding: 0 3rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+    }
+    .logo-box {
+      width: 48px;
+      height: 48px;
+      border: 1.5px solid #111;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 4px;
+    }
+    .logo-box span {
+      font-size: 0.45rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      color: #111;
+      line-height: 1.3;
+      text-align: center;
+    }
+    .logo-box .logo-green { color: #4a7c59; }
+    .logo-name {
+      font-size: 0.9rem;
+      font-weight: 400;
+      color: #111;
+      letter-spacing: 0.02em;
+    }
+    nav {
+      display: flex;
+      gap: 2.5rem;
+    }
+    nav a {
+      font-size: 0.8rem;
+      font-weight: 400;
+      color: #555;
+      text-decoration: none;
+      letter-spacing: 0.05em;
+    }
+    nav a:hover, nav a.active { color: #111; }
+
+    /* ── Hero ── */
+    .hero {
+      padding: 6rem 3rem 5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .hero-eyebrow {
+      font-size: 0.72rem;
+      font-weight: 400;
+      letter-spacing: 0.18em;
+      color: #9a8240;
+      margin-bottom: 2rem;
+    }
+    .hero h1 {
+      font-size: clamp(3rem, 7vw, 5.5rem);
+      font-weight: 200;
+      line-height: 1.15;
+      letter-spacing: -0.01em;
+      color: #111;
+      margin-bottom: 3rem;
+    }
+    .hero-divider {
+      width: 100%;
+      height: 1px;
+      background: #e8e8e8;
+      margin-bottom: 2rem;
+    }
+    .hero-sub {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: start;
+    }
+    .hero-sub-left {
+      font-size: 0.95rem;
+      color: #333;
+      line-height: 1.8;
+    }
+    .hero-sub-left strong { font-weight: 500; color: #111; }
+    .hero-sub-right {
+      font-size: 0.9rem;
+      color: #666;
+      line-height: 2;
+    }
+    .scroll-hint {
+      text-align: right;
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      color: #aaa;
+      margin-top: 3rem;
+    }
+
+    /* ── Section shared ── */
+    .section-wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 5rem 3rem;
+      border-top: 1px solid #e8e8e8;
+    }
+    .section-heading {
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 100;
+      letter-spacing: 0.12em;
+      color: #111;
+      margin-bottom: 4rem;
+    }
+
+    /* ── About ── */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+    .about-left h3 {
+      font-size: 1.1rem;
+      font-weight: 500;
+      margin-bottom: 1.25rem;
+    }
+    .about-left p {
+      font-size: 0.9rem;
+      color: #555;
+      line-height: 1.9;
+      margin-bottom: 0.75rem;
+    }
+    .about-right-quote {
+      font-size: 0.9rem;
+      color: #555;
+      line-height: 2;
+      margin-bottom: 2.5rem;
+      padding-bottom: 2.5rem;
+      border-bottom: 1px solid #e8e8e8;
+    }
+    .about-pillar {
+      display: grid;
+      grid-template-columns: 3rem 1fr;
+      gap: 0;
+      padding: 1.25rem 0;
+      border-bottom: 1px solid #e8e8e8;
+      align-items: start;
+    }
+    .about-pillar-num {
+      font-size: 0.75rem;
+      color: #aaa;
+      letter-spacing: 0.05em;
+      padding-top: 0.15rem;
+    }
+    .about-pillar-content {}
+    .about-pillar-title {
+      font-size: 0.95rem;
+      font-weight: 500;
+      margin-bottom: 0.2rem;
+    }
+    .about-pillar-en {
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      color: #aaa;
+    }
+
+    /* ── Services ── */
+    .service-row {
+      display: grid;
+      grid-template-columns: 3rem 1fr 1fr 1.5fr;
+      gap: 2rem;
+      padding: 2.5rem 0;
+      border-bottom: 1px solid #e8e8e8;
+      align-items: start;
+    }
+    .service-num {
+      font-size: 0.75rem;
+      color: #aaa;
+      letter-spacing: 0.05em;
+      padding-top: 0.5rem;
+    }
+    .service-en {
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      color: #aaa;
+      margin-bottom: 0.5rem;
+    }
+    .service-title {
+      font-size: 1rem;
+      font-weight: 400;
+      color: #111;
+    }
+    .service-title-arrow { color: #aaa; }
+    .service-desc {
+      font-size: 0.875rem;
+      color: #666;
+      line-height: 1.8;
+    }
+
+    /* ── Partners (marquee) ── */
+    .partners-wrap {
+      background: #f9f9f7;
+      border-top: 1px solid #e8e8e8;
+      border-bottom: 1px solid #e8e8e8;
+      padding: 4rem 0;
+      overflow: hidden;
+    }
+    .partners-label {
+      text-align: center;
+      font-size: 0.7rem;
+      letter-spacing: 0.18em;
+      color: #aaa;
+      margin-bottom: 2.5rem;
+    }
+    .marquee-track {
+      display: flex;
+      gap: 5rem;
+      animation: marquee 20s linear infinite;
+      width: max-content;
+    }
+    .marquee-track:hover { animation-play-state: paused; }
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+    .partner-item {
+      font-size: 0.95rem;
+      font-weight: 300;
+      letter-spacing: 0.08em;
+      color: #bbb;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    /* ── Insights ── */
+    .insight-row {
+      display: grid;
+      grid-template-columns: 5rem 1fr 1.5fr;
+      gap: 2rem;
+      padding: 2.5rem 0;
+      border-bottom: 1px solid #e8e8e8;
+      align-items: start;
+    }
+    .insight-meta {}
+    .insight-date {
+      font-size: 0.75rem;
+      color: #aaa;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.3rem;
+    }
+    .insight-cat {
+      font-size: 0.7rem;
+      color: #aaa;
+    }
+    .insight-title {
+      font-size: 1rem;
+      font-weight: 400;
+      color: #111;
+      margin-bottom: 0.25rem;
+    }
+    .insight-title-arrow { color: #aaa; }
+    .insight-desc {
+      font-size: 0.875rem;
+      color: #777;
+      line-height: 1.85;
+    }
+
+    /* ── Footer ── */
+    footer {
+      background: #fff;
+      border-top: 1px solid #e8e8e8;
+      padding: 4rem 3rem;
+    }
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr;
+      gap: 3rem;
+    }
+    .footer-brand-name {
+      font-size: 0.9rem;
+      font-weight: 400;
+      margin: 1rem 0 0.75rem;
+    }
+    .footer-brand-desc {
+      font-size: 0.8rem;
+      color: #888;
+      line-height: 1.7;
+      max-width: 280px;
+    }
+    .footer-col-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.14em;
+      color: #aaa;
+      margin-bottom: 1.25rem;
+    }
+    .footer-col a, .footer-col p {
+      display: block;
+      font-size: 0.875rem;
+      color: #555;
+      text-decoration: none;
+      margin-bottom: 0.65rem;
+    }
+    .footer-col a:hover { color: #111; }
+    .footer-bottom {
+      max-width: 1100px;
+      margin: 2.5rem auto 0;
+      padding-top: 1.5rem;
+      border-top: 1px solid #e8e8e8;
+      font-size: 0.75rem;
+      color: #bbb;
+    }
+
+    @media (max-width: 768px) {
+      header { padding: 0 1.5rem; }
+      .hero { padding: 4rem 1.5rem 3rem; }
+      .hero h1 { font-size: 2.5rem; }
+      .hero-sub { grid-template-columns: 1fr; gap: 1.5rem; }
+      .section-wrap { padding: 3rem 1.5rem; }
+      .about-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .service-row { grid-template-columns: 2.5rem 1fr; }
+      .service-row .service-desc { display: none; }
+      .insight-row { grid-template-columns: 1fr; }
+      .footer-inner { grid-template-columns: 1fr; gap: 2rem; }
+      footer { padding: 3rem 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Header -->
+<header>
+  <a class="logo" href="index.html">
+    <div class="logo-box">
+      <span>SOCIAL<br>IMPACT<br><span class="logo-green">THINKINK</span></span>
+    </div>
+    <span class="logo-name">叙叙集思有限公司</span>
+  </a>
+  <nav>
+    <a href="#about">關於</a>
+    <a href="#services">服務</a>
+    <a href="#insights">專欄</a>
+    <a href="#contact">聯絡</a>
+    <a href="index.html" style="border-left:1px solid #e8e8e8; padding-left:2.5rem;">工具紀錄 →</a>
+  </nav>
+</header>
+
+<!-- Hero -->
+<div class="hero">
+  <p class="hero-eyebrow">SOCIAL IMPACT THINKING</p>
+  <h1>以永續之名，<br>讓影響力被看見。</h1>
+  <div class="hero-divider"></div>
+  <div class="hero-sub">
+    <div class="hero-sub-left">
+      <strong>叙叙集思</strong>專注於永續影響力敘事服務，<br>
+      協助企業與組織將外在社會價值轉化為具體數據與有溫度的故事。
+    </div>
+    <div class="hero-sub-right">
+      我們相信，每一段永續旅程都值得被記錄、被衡量、被看見。透過國際標準框架與在地脈絡的結合，我們將影響力轉化為具體的數據與動人的故事。
+    </div>
+  </div>
+  <p class="scroll-hint">SCROLL ↓</p>
+</div>
+
+<!-- About -->
+<section class="section-wrap" id="about">
+  <h2 class="section-heading">ABOUT</h2>
+  <div class="about-grid">
+    <div class="about-left">
+      <h3>關於叙叙集思</h3>
+      <p>叙叙集思有限公司（JOJO SERENDIPITY LTD.）專注於永續影響力顧問服務，以社會影響力思維（Social Impact Thinking）為核心，協助企業、基金會與非營利組織量化並傳播其社會價值。</p>
+      <p>我們專注於 ESG 的 S — Social 社會面向，結合國際標準框架（GRI、IRIS+、IMM）與在地價值轉譯，為每個有意義的行動找到最清楚的語言。</p>
+    </div>
+    <div>
+      <div class="about-right-quote">
+        我們相信，每一段永續旅程都值得被記錄、被衡量、被看見。透過國際標準框架與在地脈絡的結合，我們將影響力轉化為具體的數據與動人的故事。
+      </div>
+      <div class="about-pillar">
+        <span class="about-pillar-num">01</span>
+        <div class="about-pillar-content">
+          <div class="about-pillar-title">社會影響力思維</div>
+          <div class="about-pillar-en">SOCIAL IMPACT THINKING</div>
+        </div>
+      </div>
+      <div class="about-pillar">
+        <span class="about-pillar-num">02</span>
+        <div class="about-pillar-content">
+          <div class="about-pillar-title">國際標準框架</div>
+          <div class="about-pillar-en">GRI, IRIS+, IMM</div>
+        </div>
+      </div>
+      <div class="about-pillar">
+        <span class="about-pillar-num">03</span>
+        <div class="about-pillar-content">
+          <div class="about-pillar-title">在地價值轉譯</div>
+          <div class="about-pillar-en">LOCAL VALUE TRANSLATION</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Services -->
+<section class="section-wrap" id="services">
+  <h2 class="section-heading">SERVICES</h2>
+  <div class="service-row">
+    <span class="service-num">01</span>
+    <div>
+      <div class="service-en">SUSTAINABILITY REPORT</div>
+      <div class="service-title">永續年報撰寫 <span class="service-title-arrow">→</span></div>
+    </div>
+    <div class="service-desc">協助企業依循國際標準，進行重大性議題鑑別與利害關係人溝通，打造兼具準則性與影響力的永續報告書。</div>
+  </div>
+  <div class="service-row">
+    <span class="service-num">02</span>
+    <div>
+      <div class="service-en">IRIS+ ASSESSMENT</div>
+      <div class="service-title">公益影響力評估 <span class="service-title-arrow">→</span></div>
+    </div>
+    <div class="service-desc">採用 GIIN IRIS+ 指標體系，協助企業、基金會或非營利組織量化公益專案的社會效益。</div>
+  </div>
+  <div class="service-row">
+    <span class="service-num">03</span>
+    <div>
+      <div class="service-en">IMM METHODOLOGY</div>
+      <div class="service-title">SDGs 衡量與管理 <span class="service-title-arrow">→</span></div>
+    </div>
+    <div class="service-desc">運用 Impact Measurement & Management 方法，協助企業將 SDGs 與核心策略鏈結。</div>
+  </div>
+  <div class="service-row">
+    <span class="service-num">04</span>
+    <div>
+      <div class="service-en">SUSTAINABILITY INSIGHTS</div>
+      <div class="service-title">永續趨勢專欄 <span class="service-title-arrow">→</span></div>
+    </div>
+    <div class="service-desc">追蹤全球永續發展趨勢，提供最新的 ESG 政策分析、產業動態與影響力投資洞察。</div>
+  </div>
+</section>
+
+<!-- Partners (marquee) -->
+<div class="partners-wrap">
+  <p class="partners-label">TRUSTED PARTNERS</p>
+  <div style="overflow:hidden;">
+    <div class="marquee-track">
+      <span class="partner-item">台積電</span>
+      <span class="partner-item">台泥</span>
+      <span class="partner-item">GIANT 巨大</span>
+      <span class="partner-item">東海大學 TUNGHAI UNIVERSITY</span>
+      <span class="partner-item">World Gym</span>
+      <span class="partner-item">DARFON 達方</span>
+      <span class="partner-item">仁愛基金會</span>
+      <span class="partner-item">工研院</span>
+      <!-- 重複一遍讓捲動無縫 -->
+      <span class="partner-item">台積電</span>
+      <span class="partner-item">台泥</span>
+      <span class="partner-item">GIANT 巨大</span>
+      <span class="partner-item">東海大學 TUNGHAI UNIVERSITY</span>
+      <span class="partner-item">World Gym</span>
+      <span class="partner-item">DARFON 達方</span>
+      <span class="partner-item">仁愛基金會</span>
+      <span class="partner-item">工研院</span>
+    </div>
+  </div>
+</div>
+
+<!-- Insights -->
+<section class="section-wrap" id="insights">
+  <h2 class="section-heading">INSIGHTS</h2>
+  <div class="insight-row">
+    <div class="insight-meta">
+      <div class="insight-date">2025.12</div>
+      <div class="insight-cat">公益影響力評估</div>
+    </div>
+    <div>
+      <div class="insight-title">超越數據的減碳溫度：解析減碳生活親子存摺影響力 <span class="insight-title-arrow">→</span></div>
+    </div>
+    <div class="insight-desc">台泥在淨零與公正轉型的路上，推動「減碳生活親子存摺」專案，以實體存摺紀錄日常減碳行為並量化為「碳幣」。串聯校園與家戶，讓節能減碳成為具參與感的生活日常，重新建立企業與社區間的信任。</div>
+  </div>
+  <div class="insight-row">
+    <div class="insight-meta">
+      <div class="insight-date">2024.12</div>
+      <div class="insight-cat">公益影響力評估</div>
+    </div>
+    <div>
+      <div class="insight-title">以 IRIS+ 衡量改變的力量：台積電基金會影響力評估實踐</div>
+    </div>
+    <div class="insight-desc">台積電透過旗下基金會投入多元社會議題，首度導入 GIIN 的 IRIS+ 指標架構，結合影響力管理計畫（IMP）五大構面，衡量「教師厚學計畫」與「技職培力」專案，做為優化行動與擴大影響力的基礎。</div>
+  </div>
+  <div class="insight-row">
+    <div class="insight-meta">
+      <div class="insight-date">2023–25</div>
+      <div class="insight-cat">永續年報撰寫</div>
+    </div>
+    <div>
+      <div class="insight-title">東海大學永續年報連續三年獲遠見 USR 首獎</div>
+    </div>
+    <div class="insight-desc">東海大學以《大學永續報告書》連續三年獲國內大學永續報告書組首獎。校長張國恩表示：「一所大學的價值，不是看它獲得多少榮耀，而是看它是否始終記得為誰而存在。」</div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer id="contact">
+  <div class="footer-inner">
+    <div>
+      <div class="logo-box" style="width:52px;height:52px;">
+        <span style="font-size:0.45rem;font-weight:600;letter-spacing:0.06em;color:#111;line-height:1.3;text-align:center;">SOCIAL<br>IMPACT<br><span style="color:#4a7c59;">THINKINK</span></span>
+      </div>
+      <div class="footer-brand-name">叙叙集思有限公司</div>
+      <p class="footer-brand-desc">以永續影響力思維為核心，協助企業與組織實現社會價值的量化與傳播。</p>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-label">SERVICES</div>
+      <a href="#services">永續年報撰寫</a>
+      <a href="#services">公益影響力評估</a>
+      <a href="#services">SDGs 衡量與管理</a>
+      <a href="#services">永續趨勢專欄</a>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-label">CONTACT</div>
+      <a href="mailto:tibetcondor@gmail.com">tibetcondor@gmail.com</a>
+      <div style="margin-top:1rem; border-top:1px solid #e8e8e8; padding-top:1rem;">
+        <div class="footer-col-label" style="margin-bottom:0.75rem;">工具紀錄</div>
+        <a href="index.html">JOJO Impact Hub →</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    © 2025 JOJO SERENDIPITY LTD.
+  </div>
+</footer>
+
+</body>
+</html>

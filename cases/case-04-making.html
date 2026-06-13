@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>製作說明｜辦公室許願牆 — JOJO Impact Hub</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='12' fill='%231e2d4a'/><text x='50' y='72' font-size='58' text-anchor='middle' fill='white' font-family='sans-serif'>叙</text></svg>">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", sans-serif;
+      background: #f5f5f3;
+      color: #1a1a1a;
+      line-height: 1.7;
+    }
+
+    header {
+      background: #fff;
+      border-bottom: 1px solid #e5e5e5;
+      padding: 0 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header-inner {
+      max-width: 800px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      height: 52px;
+    }
+    .back-link { font-size: 0.85rem; color: #888; text-decoration: none; }
+    .back-link:hover { color: #333; }
+    .header-sep { color: #ccc; }
+    .header-title { font-size: 0.85rem; color: #333; font-weight: 600; }
+
+    .hero {
+      background: #fff;
+      border-bottom: 1px solid #e5e5e5;
+      padding: 2.5rem 2rem 2rem;
+    }
+    .hero-inner { max-width: 800px; margin: 0 auto; }
+    .hero-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+    .case-badge {
+      background: #1e2d4a;
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 700;
+      border-radius: 999px;
+      padding: 0.2rem 0.65rem;
+    }
+    .type-tag {
+      font-size: 0.7rem;
+      font-weight: 700;
+      border-radius: 4px;
+      padding: 0.15rem 0.5rem;
+      background: #ede8fd;
+      color: #6c3fc5;
+    }
+    .hero h1 {
+      font-size: 1.6rem;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.75rem;
+    }
+    .hero-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1rem; }
+    .tag { font-size: 0.72rem; font-weight: 600; border-radius: 4px; padding: 0.15rem 0.55rem; }
+    .tag-orange { color: #c05a00; border: 1px solid #f0b97a; }
+    .tag-blue   { color: #1a5fa8; border: 1px solid #8ab4e0; }
+    .tag-gray   { color: #555;    border: 1px solid #ccc; }
+    .hero-desc { font-size: 0.95rem; color: #555; max-width: 640px; }
+
+    .toc-bar {
+      background: #fff;
+      border-bottom: 1px solid #e5e5e5;
+      padding: 0 2rem;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+    .toc-bar-inner {
+      max-width: 800px;
+      margin: 0 auto;
+      display: flex;
+    }
+    .toc-bar a {
+      display: inline-block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #888;
+      text-decoration: none;
+      padding: 0.75rem 1rem;
+      border-bottom: 2px solid transparent;
+    }
+    .toc-bar a:hover { color: #333; border-bottom-color: #ccc; }
+
+    main {
+      max-width: 800px;
+      margin: 2.5rem auto;
+      padding: 0 2rem;
+    }
+    section { margin-bottom: 3rem; }
+
+    h2 {
+      font-size: 1.15rem;
+      font-weight: 800;
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid #e5e5e5;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    h2 .section-num {
+      background: #1e2d4a;
+      color: #fff;
+      font-size: 0.7rem;
+      border-radius: 4px;
+      padding: 0.1rem 0.4rem;
+    }
+
+    /* Pain points */
+    .pain-list { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+    .pain-card {
+      background: #fff;
+      border: 1px solid #e5e5e5;
+      border-radius: 10px;
+      padding: 1rem 1.1rem;
+    }
+    .pain-card .pain-num { font-size: 0.7rem; font-weight: 700; color: #c0392b; margin-bottom: 0.35rem; }
+    .pain-card p { font-size: 0.875rem; color: #444; }
+
+    /* Stages */
+    .stage-list { display: flex; flex-direction: column; gap: 0; }
+    .stage { display: flex; gap: 1.25rem; position: relative; }
+    .stage:not(:last-child)::before {
+      content: '';
+      position: absolute;
+      left: 17px; top: 36px; bottom: 0;
+      width: 2px;
+      background: #e5e5e5;
+    }
+    .stage-num {
+      flex-shrink: 0;
+      width: 36px; height: 36px;
+      background: #1e2d4a;
+      color: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+    .stage-body { padding-bottom: 1.75rem; flex: 1; }
+    .stage-title { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.35rem; padding-top: 0.4rem; }
+    .stage-desc { font-size: 0.875rem; color: #555; }
+
+    /* Prompt cards */
+    .prompt-card {
+      background: #fff;
+      border: 1px solid #e5e5e5;
+      border-radius: 10px;
+      margin-bottom: 1rem;
+      overflow: hidden;
+    }
+    .prompt-header {
+      background: #f8f8f6;
+      border-bottom: 1px solid #e5e5e5;
+      padding: 0.65rem 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .prompt-num {
+      font-size: 0.7rem;
+      font-weight: 700;
+      background: #1e2d4a;
+      color: #fff;
+      border-radius: 4px;
+      padding: 0.1rem 0.4rem;
+    }
+    .prompt-stage-tag { font-size: 0.72rem; color: #888; }
+    .prompt-body { padding: 1rem 1.1rem; }
+    .prompt-quote {
+      background: #f3f0ff;
+      border-left: 3px solid #6c3fc5;
+      border-radius: 0 6px 6px 0;
+      padding: 0.75rem 1rem;
+      font-size: 0.875rem;
+      color: #333;
+      margin-bottom: 0.75rem;
+      font-style: italic;
+      line-height: 1.65;
+    }
+    .prompt-note { font-size: 0.82rem; color: #666; }
+    .prompt-note strong { color: #1a1a1a; }
+
+    /* Pitfalls */
+    .pitfall {
+      background: #fff;
+      border: 1px solid #f0c0b8;
+      border-left: 4px solid #c0392b;
+      border-radius: 0 10px 10px 0;
+      padding: 1rem 1.1rem;
+      margin-bottom: 0.85rem;
+    }
+    .pitfall-header { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; }
+    .pitfall-num {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: #c0392b;
+      background: #fde8e8;
+      border-radius: 4px;
+      padding: 0.1rem 0.4rem;
+    }
+    .pitfall-title { font-size: 0.875rem; font-weight: 700; }
+    .pitfall p { font-size: 0.875rem; color: #555; }
+    .pitfall code {
+      font-family: monospace;
+      font-size: 0.8rem;
+      background: #f3f3f1;
+      padding: 0.1rem 0.35rem;
+      border-radius: 4px;
+    }
+
+    /* Data structure */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.875rem;
+      background: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid #e5e5e5;
+    }
+    .data-table th {
+      background: #1e2d4a;
+      color: #fff;
+      text-align: left;
+      padding: 0.6rem 1rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+    .data-table td {
+      padding: 0.65rem 1rem;
+      border-bottom: 1px solid #f0f0ee;
+      color: #444;
+    }
+    .data-table tr:last-child td { border-bottom: none; }
+    .data-table code {
+      font-family: monospace;
+      font-size: 0.8rem;
+      background: #f3f3f1;
+      padding: 0.1rem 0.35rem;
+      border-radius: 4px;
+      color: #1a1a1a;
+    }
+
+    /* Info box */
+    .info-box {
+      background: #eaf2fb;
+      border: 1px solid #8ab4e0;
+      border-radius: 10px;
+      padding: 1rem 1.25rem;
+      font-size: 0.875rem;
+      color: #1a3a5c;
+      margin-bottom: 1rem;
+    }
+
+    /* Update steps */
+    .update-steps { display: flex; flex-direction: column; gap: 0.6rem; }
+    .update-step {
+      background: #fff;
+      border: 1px solid #e5e5e5;
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      display: flex;
+      gap: 0.75rem;
+      align-items: flex-start;
+      font-size: 0.875rem;
+    }
+    .update-step-num {
+      flex-shrink: 0;
+      width: 22px; height: 22px;
+      background: #1e2d4a;
+      color: #fff;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.7rem;
+      font-weight: 700;
+    }
+    .update-step code {
+      font-family: monospace;
+      font-size: 0.8rem;
+      background: #f3f3f1;
+      padding: 0.1rem 0.35rem;
+      border-radius: 4px;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 0.75rem;
+      color: #aaa;
+      padding: 2.5rem 1rem;
+      border-top: 1px solid #e5e5e5;
+      margin-top: 2rem;
+    }
+
+    @media (max-width: 600px) {
+      .pain-list { grid-template-columns: 1fr; }
+      main { padding: 0 1rem; }
+      header { padding: 0 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <a class="back-link" href="../index.html">← 返回</a>
+    <span class="header-sep">/</span>
+    <span class="header-title">辦公室許願牆 — 製作說明</span>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-meta">
+      <span class="case-badge">案 4</span>
+      <span class="type-tag">製作說明</span>
+    </div>
+    <h1>辦公室許願牆</h1>
+    <div class="hero-tags">
+      <span class="tag tag-blue">Codex</span>
+      <span class="tag tag-blue">Firebase</span>
+      <span class="tag tag-blue">Firestore</span>
+      <span class="tag tag-gray">即時同步</span>
+      <span class="tag tag-gray">四步上線</span>
+    </div>
+    <p class="hero-desc">
+      用 Codex（OpenAI VS Code 延伸模組）生成程式碼，串接 Firebase Firestore 實作即時留言牆，全程不寫一行程式碼，從零到上線約 30 分鐘。
+    </p>
+  </div>
+</div>
+
+<div class="toc-bar">
+  <div class="toc-bar-inner">
+    <a href="#why">為什麼需要</a>
+    <a href="#stages">建置流程</a>
+    <a href="#prompts">指令範本</a>
+    <a href="#data">資料結構</a>
+    <a href="#pitfalls">踩雷紀錄</a>
+    <a href="#update">後續更新</a>
+  </div>
+</div>
+
+<main>
+
+  <!-- 1. 為什麼需要 -->
+  <section id="why">
+    <h2><span class="section-num">1</span> 為什麼需要這個工具</h2>
+    <div class="pain-list">
+      <div class="pain-card">
+        <div class="pain-num">痛點 1</div>
+        <p>想收集團隊心聲，用 Google Forms 收不到即時感——填完看不到其他人說什麼</p>
+      </div>
+      <div class="pain-card">
+        <div class="pain-num">痛點 2</div>
+        <p>靜態網頁存 localStorage，只存在自己的瀏覽器，換裝置或換人就看不到</p>
+      </div>
+      <div class="pain-card">
+        <div class="pain-num">痛點 3</div>
+        <p>需要「雙向」——不只是送出資料，還要即時看到所有人的留言</p>
+      </div>
+      <div class="pain-card">
+        <div class="pain-num">痛點 4</div>
+        <p>不想管伺服器，希望免費、穩定、部署簡單</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. 建置流程 -->
+  <section id="stages">
+    <h2><span class="section-num">2</span> 建置流程</h2>
+    <div class="stage-list">
+      <div class="stage">
+        <div class="stage-num">1</div>
+        <div class="stage-body">
+          <div class="stage-title">用 Codex 生成 index.html</div>
+          <div class="stage-desc">在 VS Code 右側 Codex 面板輸入需求，1 分 16 秒產出單一 HTML 檔案，包含暱稱欄、留言欄、送出按鈕、Firestore 串接框架，並在程式裡標注「把 Firebase 設定貼在這裡」的位置。</div>
+        </div>
+      </div>
+      <div class="stage">
+        <div class="stage-num">2</div>
+        <div class="stage-body">
+          <div class="stage-title">建立 Firebase 專案與 Firestore</div>
+          <div class="stage-desc">到 console.firebase.google.com → 建立專案「office-wish」→ 開 Firestore Database（Standard 版，asia-east1，測試模式）。</div>
+        </div>
+      </div>
+      <div class="stage">
+        <div class="stage-num">3</div>
+        <div class="stage-body">
+          <div class="stage-title">拿 Firebase 設定，交給 AI 貼入</div>
+          <div class="stage-desc">在 Firebase Console 左上角齒輪 → 一般 → 你的應用程式 → 點網頁（&lt;/&gt;）→ 複製 firebaseConfig。把設定整段貼給 Codex：「這是我的 Firebase 設定，幫我貼到 index.html 正確位置並接上資料庫」，AI 自動完成。</div>
+        </div>
+      </div>
+      <div class="stage">
+        <div class="stage-num">4</div>
+        <div class="stage-body">
+          <div class="stage-title">登入 Firebase CLI，部署上線</div>
+          <div class="stage-desc">在 VS Code 終端機自己跑登入指令（這步 AI 做不到，因為要跳出瀏覽器讓你親自點「允許」）。登入後 init hosting，再 deploy，完成。</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. 指令範本 -->
+  <section id="prompts">
+    <h2><span class="section-num">3</span> 指令範本</h2>
+
+    <div class="prompt-card">
+      <div class="prompt-header">
+        <span class="prompt-num">指令 1</span>
+        <span class="prompt-stage-tag">階段 1 · 生成程式碼</span>
+      </div>
+      <div class="prompt-body">
+        <div class="prompt-quote">
+          請用一個 index.html 檔，做一個「辦公室許願牆」網頁：畫面上有暱稱欄、留言欄、一個送出按鈕；送出後把留言存到 Firebase Firestore，並即時顯示所有人的留言（最新的排最上面）。請用最簡單、最少檔案的寫法，並在程式裡用註解清楚標出「把 Firebase 設定貼在這裡」的位置。
+        </div>
+        <p class="prompt-note"><strong>關鍵技巧：</strong>「最簡單、最少檔案」避免 AI 過度工程化；「標出貼入位置」讓非工程師知道下一步要做什麼，不用自己看懂程式碼。</p>
+      </div>
+    </div>
+
+    <div class="prompt-card">
+      <div class="prompt-header">
+        <span class="prompt-num">指令 2</span>
+        <span class="prompt-stage-tag">階段 3 · 串接 Firebase</span>
+      </div>
+      <div class="prompt-body">
+        <div class="prompt-quote">
+          這是我的 Firebase 設定，幫我貼到 index.html 正確位置並接上資料庫：<br><br>
+          [貼上你的 firebaseConfig]
+        </div>
+        <p class="prompt-note"><strong>為什麼不自己貼：</strong>Firebase 設定有特定位置和引入方式，讓 AI 貼比自己找位置快，也不會貼錯。</p>
+      </div>
+    </div>
+
+    <div class="prompt-card">
+      <div class="prompt-header">
+        <span class="prompt-num">指令 3</span>
+        <span class="prompt-stage-tag">階段 4 · 部署（自己跑）</span>
+      </div>
+      <div class="prompt-body">
+        <div class="prompt-quote">
+          npx firebase-tools login<br>
+          npx firebase-tools init hosting<br>
+          npx firebase-tools deploy --only hosting
+        </div>
+        <p class="prompt-note"><strong>注意：</strong>login 這行要自己在 VS Code 終端機打，輸入 <strong>y</strong> 同意安裝，瀏覽器跳出來點允許。init 時 Public directory 輸入 <strong>.</strong>（點），Single-page app 選 <strong>N</strong>，Overwrite index.html 選 <strong>N</strong>。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. 資料結構 -->
+  <section id="data">
+    <h2><span class="section-num">4</span> Firestore 資料結構</h2>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>欄位</th>
+          <th>型別</th>
+          <th>說明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>nickname</code></td>
+          <td>string</td>
+          <td>留言者暱稱</td>
+        </tr>
+        <tr>
+          <td><code>message</code></td>
+          <td>string</td>
+          <td>留言內容</td>
+        </tr>
+        <tr>
+          <td><code>createdAt</code></td>
+          <td>timestamp</td>
+          <td>留言時間，用於 orderBy 排序（最新在上）</td>
+        </tr>
+      </tbody>
+    </table>
+    <br>
+    <div class="info-box">
+      Collection 名稱：<code>wishes</code>｜即時監聽用 <code>onSnapshot</code>，任何人送出留言，所有開著的頁面會立刻更新，不需要手動重新整理。
+    </div>
+  </section>
+
+  <!-- 5. 踩雷紀錄 -->
+  <section id="pitfalls">
+    <h2><span class="section-num">5</span> 踩雷紀錄</h2>
+
+    <div class="pitfall">
+      <div class="pitfall-header">
+        <span class="pitfall-num">雷 1</span>
+        <span class="pitfall-title">npx 問 Ok to proceed? 按錯選 n</span>
+      </div>
+      <p>首次跑 <code>npx firebase-tools</code> 會問是否安裝，預設是 <code>n</code>，直接按 Enter 就取消了。要輸入 <code>y</code> 再按 Enter 才會繼續安裝。</p>
+    </div>
+
+    <div class="pitfall">
+      <div class="pitfall-header">
+        <span class="pitfall-num">雷 2</span>
+        <span class="pitfall-title">deploy 報錯「Not in a Firebase app directory」</span>
+      </div>
+      <p>直接跑 <code>deploy</code> 前要先跑 <code>init hosting</code> 產生 <code>firebase.json</code>，少這步就會報錯。init 時 Public directory 填 <code>.</code>（當前資料夾），不要填 <code>public</code>。</p>
+    </div>
+
+    <div class="pitfall">
+      <div class="pitfall-header">
+        <span class="pitfall-num">雷 3</span>
+        <span class="pitfall-title">login 叫 AI 跑，回報 non-interactive</span>
+      </div>
+      <p>Firebase 登入需要跳出瀏覽器讓你親自點「允許」，AI 的終端機是非互動模式，做不到這步。login 那行一定要自己在 VS Code 終端機手動跑。</p>
+    </div>
+  </section>
+
+  <!-- 6. 後續更新 -->
+  <section id="update">
+    <h2><span class="section-num">6</span> 後續更新網站的方法</h2>
+    <div class="update-steps">
+      <div class="update-step">
+        <div class="update-step-num">1</div>
+        <div>在 VS Code 修改 <code>index.html</code>（告訴 Codex 或 Claude Code 要改什麼，讓 AI 改）</div>
+      </div>
+      <div class="update-step">
+        <div class="update-step-num">2</div>
+        <div>在 VS Code 終端機跑：<code>npx firebase-tools deploy --only hosting</code></div>
+      </div>
+      <div class="update-step">
+        <div class="update-step-num">3</div>
+        <div>等約 30 秒，https://office-wish.web.app 自動更新，不需要重新 init 或 login</div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  JOJO Impact Hub · 以 Codex + Claude Code 協作製作 · 2026-06-13
+</footer>
+
+</body>
+</html>

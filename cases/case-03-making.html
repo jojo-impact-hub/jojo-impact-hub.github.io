@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>製作說明｜郵件寄送登記系統 — JOJO Impact Hub</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='12' fill='%231e2d4a'/><text x='50' y='72' font-size='58' text-anchor='middle' fill='white' font-family='sans-serif'>叙</text></svg>">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", sans-serif;
+      background: #f5f5f3;
+      color: #1a1a1a;
+      line-height: 1.7;
+    }
+
+    /* ── Header ── */
+    header {
+      background: #fff;
+      border-bottom: 1px solid #e5e5e5;
+      padding: 0 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header-inner {
+      max-width: 800px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      height: 52px;
+    }
+    .back-link {
+      font-size: 0.85rem;
+      color: #888;
+      text-decoration: none;
+    }
+    .back-link:hover { color: #333; }
+    .header-sep { color: #ccc; }
+    .header-title { font-size: 0.85rem; color: #333; font-weight: 600; }
+
+    /* ── Hero ── */
+    .hero {
+      background: #fff;
+      border-bottom: 1px solid #e5e5e5;
+      padding: 2.5rem 2rem 2rem;
+    }
+    .hero-inner { max-width: 800px; margin: 0 auto; }
+    .hero-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+    .case-badge {
+      background: #1e2d4a;
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 700;
+      border-radius: 999px;
+      padding: 0.2rem 0.65rem;
+    }
+    .type-tag {
+      font-size: 0.7rem;
+      font-weight: 700;
+      border-radius: 4px;
+      padding: 0.15rem 0.5rem;
+      background: #ede8fd;
+      color: #6c3fc5;
+    }
+    .hero h1 {
+      font-size: 1.6rem;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.75rem;
+    }
+    .hero-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-bottom: 1rem;
+    }
+    .tag {
+      font-size: 0.72rem;
+      font-weight: 600;
+      border-radius: 4px;
+      padding: 0.15rem 0.55rem;
+    }
+    .tag-orange { color: #c05a00; border: 1px solid #f0b97a; }
+    .tag-blue   { color: #1a5fa8; border: 1px solid #8ab4e0; }
+    .tag-gray   { color: #555;    border: 1px solid #ccc; }
+    .hero-desc {
+      font-size: 0.95rem;
+      color: #555;
+      max-width: 640px;
+    }
+
+    /* ── Toc ── */
+    .toc-bar {
+      background: #fff;
+      border-bottom: 1px solid #e5e5e5;
+      padding: 0 2rem;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+    .toc-bar-inner {
+      max-width: 800px;
+      margin: 0 auto;
+      display: flex;
+      gap: 0;
+    }
+    .toc-bar a {
+      display: inline-block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #888;
+      text-decoration: none;
+      padding: 0.75rem 1rem;
+      border-bottom: 2px solid transparent;
+    }
+    .toc-bar a:hover { color: #333; border-bottom-color: #ccc; }
+
+    /* ── Main ── */
+    main {
+      max-width: 800px;
+      margin: 2.5rem auto;
+      padding: 0 2rem;
+    }
+
+    section { margin-bottom: 3rem; }
+
+    h2 {
+      font-size: 1.15rem;
+      font-weight: 800;
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid #e5e5e5;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    h2 .section-num {
+      background: #1e2d4a;
+      color: #fff;
+      font-size: 0.7rem;
+      border-radius: 4px;
+      padding: 0.1rem 0.4rem;
+    }
+
+    /* ── Pain Points ── */
+    .pain-list {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+    }
+    .pain-card {
+      background: #fff;
+      border: 1px solid #e5e5e5;
+      border-radius: 10px;
+      padding: 1rem 1.1rem;
+    }
+    .pain-card .pain-num {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: #c0392b;
+      margin-bottom: 0.35rem;
+    }
+    .pain-card p { font-size: 0.875rem; color: #444; }
+
+    /* ── Stages ── */
+    .stage-list { display: flex; flex-direction: column; gap: 0; }
+    .stage {
+      display: flex;
+      gap: 1.25rem;
+      position: relative;
+    }
+    .stage:not(:last-child)::before {
+      content: '';
+      position: absolute;
+      left: 17px;
+      top: 36px;
+      bottom: 0;
+      width: 2px;
+      background: #e5e5e5;
+    }
+    .stage-num {
+      flex-shrink: 0;
+      width: 36px;
+      height: 36px;
+      background: #1e2d4a;
+      color: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+    .stage-body { padding-bottom: 1.75rem; flex: 1; }
+    .stage-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 0.35rem;
+      padding-top: 0.4rem;
+    }
+    .stage-desc { font-size: 0.875rem; color: #555; }
+
+    /* ── Prompt Cards ── */
+    .prompt-card {
+      background: #fff;
+      border: 1px solid #e5e5e5;
+      border-radius: 10px;
+      margin-bottom: 1rem;
+      overflow: hidden;
+    }
+    .prompt-header {
+      background: #f8f8f6;
+      border-bottom: 1px solid #e5e5e5;
+      padding: 0.65rem 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .prompt-num {
+      font-size: 0.7rem;
+      font-weight: 700;
+      background: #1e2d4a;
+      color: #fff;
+      border-radius: 4px;
+      padding: 0.1rem 0.4rem;
+    }
+    .prompt-stage-tag {
+      font-size: 0.72rem;
+      color: #888;
+    }
+    .prompt-body {
+      padding: 1rem 1.1rem;
+    }
+    .prompt-quote {
+      background: #f3f0ff;
+      border-left: 3px solid #6c3fc5;
+      border-radius: 0 6px 6px 0;
+      padding: 0.75rem 1rem;
+      font-size: 0.875rem;
+      color: #333;
+      margin-bottom: 0.75rem;
+      font-style: italic;
+      line-height: 1.65;
+    }
+    .prompt-note {
+      font-size: 0.82rem;
+      color: #666;
+    }
+    .prompt-note strong { color: #1a1a1a; }
+
+    /* ── Pitfalls ── */
+    .pitfall {
+      background: #fff;
+      border: 1px solid #f0c0b8;
+      border-left: 4px solid #c0392b;
+      border-radius: 0 10px 10px 0;
+      padding: 1rem 1.1rem;
+      margin-bottom: 0.85rem;
+    }
+    .pitfall-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .pitfall-num {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: #c0392b;
+      background: #fde8e8;
+      border-radius: 4px;
+      padding: 0.1rem 0.4rem;
+    }
+    .pitfall-title { font-size: 0.9rem; font-weight: 700; }
+    .pitfall-body { font-size: 0.875rem; color: #555; }
+    .pitfall-body .label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-top: 0.5rem;
+      margin-bottom: 0.2rem;
+    }
+
+    /* ── Feature List ── */
+    .feature-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.6rem;
+    }
+    .feature-item {
+      background: #fff;
+      border: 1px solid #e5e5e5;
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      font-size: 0.875rem;
+      color: #444;
+      display: flex;
+      gap: 0.5rem;
+      align-items: flex-start;
+    }
+    .feature-dot {
+      width: 6px;
+      height: 6px;
+      background: #1e2d4a;
+      border-radius: 50%;
+      margin-top: 0.45rem;
+      flex-shrink: 0;
+    }
+
+    /* ── Takeaways ── */
+    .takeaway-list { display: flex; flex-direction: column; gap: 0.6rem; }
+    .takeaway {
+      background: #fff;
+      border: 1px solid #e5e5e5;
+      border-radius: 8px;
+      padding: 0.85rem 1rem;
+      font-size: 0.875rem;
+      color: #333;
+      display: flex;
+      gap: 0.75rem;
+    }
+    .takeaway-idx {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #888;
+      flex-shrink: 0;
+      padding-top: 0.05rem;
+    }
+
+    /* ── Footer ── */
+    footer {
+      text-align: center;
+      font-size: 0.75rem;
+      color: #aaa;
+      padding: 2rem 1rem;
+      border-top: 1px solid #e5e5e5;
+      margin-top: 2rem;
+    }
+
+    @media (max-width: 600px) {
+      main { padding: 0 1rem; }
+      header { padding: 0 1rem; }
+      .hero { padding: 1.5rem 1rem 1.5rem; }
+      .toc-bar { padding: 0 1rem; }
+      .pain-list { grid-template-columns: 1fr; }
+      .feature-grid { grid-template-columns: 1fr; }
+      .hero h1 { font-size: 1.25rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <a class="back-link" href="../index.html">← JOJO Impact Hub</a>
+    <span class="header-sep">/</span>
+    <span class="header-title">案 3 製作說明</span>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-meta">
+      <span class="case-badge">案 3</span>
+      <span class="type-tag">製作說明</span>
+    </div>
+    <h1>郵件寄送登記系統</h1>
+    <div class="hero-tags">
+      <span class="tag tag-blue">Claude Code</span>
+      <span class="tag tag-blue">Apps Script</span>
+      <span class="tag tag-orange">Google Sheets</span>
+      <span class="tag tag-orange">GitHub Pages</span>
+      <span class="tag tag-gray">六階段流程</span>
+      <span class="tag tag-gray">3 個踩雷紀錄</span>
+    </div>
+    <p class="hero-desc">
+      從「換台電腦就看不到紀錄」出發，用 Claude Code 協作，最終做出一套跨裝置、有密碼保護、資料存在 Google 試算表的合約寄送登記系統。單一 HTML 檔案，無需安裝，打開連結即可使用。
+    </p>
+  </div>
+</div>
+
+<div class="toc-bar">
+  <div class="toc-bar-inner">
+    <a href="#background">背景</a>
+    <a href="#stages">製作流程</a>
+    <a href="#prompts">指令範本</a>
+    <a href="#pitfalls">踩雷紀錄</a>
+    <a href="#features">成品特色</a>
+    <a href="#takeaways">心得提醒</a>
+  </div>
+</div>
+
+<main>
+
+  <!-- ── 背景 ── -->
+  <section id="background">
+    <h2><span class="section-num">01</span> 背景與痛點</h2>
+    <div class="pain-list">
+      <div class="pain-card">
+        <div class="pain-num">痛點 1</div>
+        <p>原本的登記系統把資料存在 localStorage（瀏覽器本機），換台電腦就完全看不到之前的紀錄。</p>
+      </div>
+      <div class="pain-card">
+        <div class="pain-num">痛點 2</div>
+        <p>辦公室有三台電腦加一支手機，合約寄送是業務核心記錄，需要隨時在任何裝置上查得到。</p>
+      </div>
+      <div class="pain-card">
+        <div class="pain-num">痛點 3</div>
+        <p>廠商和窗口欄位是兩個分開的下拉，每次都要分別選，且不會自動帶入對方的 email 和電話。</p>
+      </div>
+      <div class="pain-card">
+        <div class="pain-num">痛點 4</div>
+        <p>合約寄出後要追蹤「對方是否已用印」，但原本沒有這個欄位，每次要另外記在別的地方。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 製作流程 ── -->
+  <section id="stages">
+    <h2><span class="section-num">02</span> 六階段製作流程</h2>
+    <div class="stage-list">
+
+      <div class="stage">
+        <div class="stage-num">1</div>
+        <div class="stage-body">
+          <div class="stage-title">功能需求確認</div>
+          <div class="stage-desc">把廠商和窗口合併成單一下拉欄位（格式：「廠商名稱 ／ 窗口姓名」），選完自動帶入對方的 email 和電話。同時新增「對方用印狀態」追蹤欄位（無需用印 ／ 待用印 ／ 已用印），以及窗口電話欄位。每項需求先說清楚，讓 Claude 確認可行後才動工。</div>
+        </div>
+      </div>
+
+      <div class="stage">
+        <div class="stage-num">2</div>
+        <div class="stage-body">
+          <div class="stage-title">選擇跨裝置架構</div>
+          <div class="stage-desc">說明有多台裝置的問題，請 Claude 評估解法。Claude 列出幾個選項：Firebase（需要開帳號）、GitHub Gist（讀取方便但寫入麻煩）、Google Drive API（設定複雜）、Google Apps Script + Google Sheets（已熟悉、資料在試算表直接看得到、免費）。選了最熟悉的 Apps Script 方案。</div>
+        </div>
+      </div>
+
+      <div class="stage">
+        <div class="stage-num">3</div>
+        <div class="stage-body">
+          <div class="stage-title">建立 Apps Script 後端</div>
+          <div class="stage-desc">在 Google 試算表的「擴充功能 → Apps Script」建立專案，Claude 寫出 doGet（讀取寄送紀錄與預設廠商清單）和 doPost（新增 ／ 更新 ／ 刪除紀錄、儲存廠商）兩個函式。部署為 Web App（執行身分：我；誰可以存取：所有人），取得 API 網址。</div>
+        </div>
+      </div>
+
+      <div class="stage">
+        <div class="stage-num">4</div>
+        <div class="stage-body">
+          <div class="stage-title">HTML 前端串接 API</div>
+          <div class="stage-desc">把原本讀寫 localStorage 的所有操作，改成用 fetch() 呼叫 Apps Script API。新增讀取中的 loading bar，讓使用者知道資料正在載入。廠商管理 Modal 升級為每筆含四個欄位（廠商名稱、窗口姓名、Email、電話），選廠商時自動帶入對應資訊。</div>
+        </div>
+      </div>
+
+      <div class="stage">
+        <div class="stage-num">5</div>
+        <div class="stage-body">
+          <div class="stage-title">上傳 GitHub Pages 解決跨裝置問題</div>
+          <div class="stage-desc">本機用 file:// 開 HTML 檔案，瀏覽器的安全限制（CORS）可能導致 API 呼叫失敗。解決方式是把 HTML 上傳到 GitHub Pages——有真實的 HTTPS 網址，CORS 正常，任何裝置打開同一個網址就能存取同一份資料。</div>
+        </div>
+      </div>
+
+      <div class="stage">
+        <div class="stage-num">6</div>
+        <div class="stage-body">
+          <div class="stage-title">加入密碼保護</div>
+          <div class="stage-desc">GitHub Pages 預設是公開的，合約寄送記錄不宜完全公開。在頁面最前面加一個全螢幕密碼覆蓋層，輸入正確才載入資料。同一個 session 內不需要重複輸入。密碼存在 HTML 第一行的常數，之後要改直接改那個字就好。</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── 指令範本 ── -->
+  <section id="prompts">
+    <h2><span class="section-num">03</span> 指令範本（可複製套用）</h2>
+
+    <div class="prompt-card">
+      <div class="prompt-header">
+        <span class="prompt-num">指令 1</span>
+        <span class="prompt-stage-tag">對應階段 2｜說明跨裝置問題，請 Claude 評估架構</span>
+      </div>
+      <div class="prompt-body">
+        <div class="prompt-quote">
+          「這個 HTML 現在把資料存在 localStorage，但我有三台電腦，換台電腦就看不到紀錄了。我需要資料可以跨裝置同步，有什麼方法可以做到？幫我評估幾個選項的難易度。」
+        </div>
+        <div class="prompt-note">
+          <strong>為什麼這樣說：</strong>先描述你的現實狀況（幾台裝置、現在的問題），再請 Claude 評估選項，而不是直接問「怎麼接 Firebase」——因為你可能還不知道 Firebase 適不適合，讓 Claude 幫你比較再做決定。
+        </div>
+      </div>
+    </div>
+
+    <div class="prompt-card">
+      <div class="prompt-header">
+        <span class="prompt-num">指令 2</span>
+        <span class="prompt-stage-tag">對應階段 3｜請 Claude 建立 Apps Script 後端</span>
+      </div>
+      <div class="prompt-body">
+        <div class="prompt-quote">
+          「好，我選 Google Apps Script + Google Sheets。幫我寫 Apps Script 的程式碼，要能讀取寄送紀錄、新增一筆、刪除一筆、更新用印狀態，還有讀取和儲存常用廠商清單。部署方式也說明一下。」
+        </div>
+        <div class="prompt-note">
+          <strong>為什麼這樣說：</strong>決定架構後，把所有需要的 API 功能一次說完，Claude 就能寫出完整的程式碼，不需要一個功能一個功能慢慢加，也不會遺漏。
+        </div>
+      </div>
+    </div>
+
+    <div class="prompt-card">
+      <div class="prompt-header">
+        <span class="prompt-num">指令 3</span>
+        <span class="prompt-stage-tag">對應階段 4｜升級前端串接 API</span>
+      </div>
+      <div class="prompt-body">
+        <div class="prompt-quote">
+          「Apps Script 部署好了，URL 是〔貼上你的 URL〕。現在幫我把 HTML 裡面所有讀寫 localStorage 的地方，都改成呼叫這個 API。讀取的時候加個 loading 提示，讓我知道資料正在載入。」
+        </div>
+        <div class="prompt-note">
+          <strong>為什麼這樣說：</strong>直接把 API URL 提供給 Claude，並說明要把哪些行為對接過去。加「loading 提示」這種 UX 細節也一起說，Claude 就會一併處理，不用後來再補。
+        </div>
+      </div>
+    </div>
+
+    <div class="prompt-card">
+      <div class="prompt-header">
+        <span class="prompt-num">指令 4</span>
+        <span class="prompt-stage-tag">對應階段 6｜加入密碼保護</span>
+      </div>
+      <div class="prompt-body">
+        <div class="prompt-quote">
+          「這個頁面要放在 GitHub Pages，但資料是我們公司的合約寄送紀錄，不想讓不相關的人看到。可以加一個密碼保護嗎？輸入正確密碼才能看到內容，同一次開著瀏覽器不需要重複輸入。」
+        </div>
+        <div class="prompt-note">
+          <strong>為什麼這樣說：</strong>說清楚為什麼需要（公開但不想公開）和體驗需求（同 session 不重複輸入），Claude 會選用 sessionStorage 實作，既達到目的又不麻煩。
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ── 踩雷紀錄 ── -->
+  <section id="pitfalls">
+    <h2><span class="section-num">04</span> 踩雷紀錄</h2>
+
+    <div class="pitfall">
+      <div class="pitfall-header">
+        <span class="pitfall-num">雷 1</span>
+        <span class="pitfall-title">Apps Script 首次部署跳出「未驗證應用程式」警告</span>
+      </div>
+      <div class="pitfall-body">
+        <div class="label">狀況</div>
+        點「授權存取」後，Google 跳出警告頁「Google 尚未驗證這個應用程式」，以為是做錯了或有安全問題，不敢繼續。
+        <div class="label">修法</div>
+        這是正常的。點「進階」→「前往〔專案名稱〕（不安全）」→ 繼續授權，就能正常部署。因為這是你自己寫給自己用的 Script，Google 不會主動驗證，出現這個畫面代表流程沒有問題。
+      </div>
+    </div>
+
+    <div class="pitfall">
+      <div class="pitfall-header">
+        <span class="pitfall-num">雷 2</span>
+        <span class="pitfall-title">廠商格式升級後，Apps Script 也要同步更新並重新部署</span>
+      </div>
+      <div class="pitfall-body">
+        <div class="label">狀況</div>
+        把廠商預設格式從兩個欄位（廠商、窗口）升級成四個欄位（廠商、窗口、Email、電話）後，前端正常但讀取資料卻出錯，或新欄位存不進去。
+        <div class="label">修法</div>
+        Apps Script 的 doGet 和 doPost 都要同步修改來支援新格式，然後重新「部署 → 管理部署」→ 建立新版本。光改程式碼不夠，一定要重新部署才會生效。
+      </div>
+    </div>
+
+    <div class="pitfall">
+      <div class="pitfall-header">
+        <span class="pitfall-num">雷 3</span>
+        <span class="pitfall-title">廠商清單出現「company／contact」假資料</span>
+      </div>
+      <div class="pitfall-body">
+        <div class="label">狀況</div>
+        系統開起來後，廠商下拉清單出現「company」「contact」等英文假資料，不是自己輸入的。
+        <div class="label">修法</div>
+        是 Google Sheets 的欄位標題列被讀進來了。到 Google 試算表的「廠商窗口」分頁，把第一列的欄位名稱（company、contact 等）手動刪掉，或確認 Apps Script 的讀取範圍從第二列開始（跳過標題列），重新載入就正常。
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ── 成品特色 ── -->
+  <section id="features">
+    <h2><span class="section-num">05</span> 成品特色</h2>
+    <div class="feature-grid">
+      <div class="feature-item"><span class="feature-dot"></span>廠商＋窗口合併下拉，格式統一好辨識</div>
+      <div class="feature-item"><span class="feature-dot"></span>選廠商自動帶入 email 和電話，不用手動查</div>
+      <div class="feature-item"><span class="feature-dot"></span>對方用印狀態三階段追蹤（無需 ／ 待用印 ／ 已用印）</div>
+      <div class="feature-item"><span class="feature-dot"></span>資料存在 Google Sheets，三台電腦 ＋ 手機都同步</div>
+      <div class="feature-item"><span class="feature-dot"></span>前端密碼保護，不對外公開資料</div>
+      <div class="feature-item"><span class="feature-dot"></span>CSV 一鍵匯出，方便備份或整理</div>
+      <div class="feature-item"><span class="feature-dot"></span>廠商管理 Modal，隨時新增 ／ 修改 ／ 刪除廠商資料</div>
+      <div class="feature-item"><span class="feature-dot"></span>單一 HTML 檔案，無需安裝，打開網址即可使用</div>
+    </div>
+  </section>
+
+  <!-- ── 心得 ── -->
+  <section id="takeaways">
+    <h2><span class="section-num">06</span> 心得提醒</h2>
+    <div class="takeaway-list">
+      <div class="takeaway">
+        <span class="takeaway-idx">01</span>
+        <span>localStorage 只存在那台電腦的那個瀏覽器——資料要跨裝置，就一定需要真正的後端。Google Sheets 就是最好找的後端。</span>
+      </div>
+      <div class="takeaway">
+        <span class="takeaway-idx">02</span>
+        <span>Apps Script 出現「未驗證應用程式」不是錯誤，是正常流程。自己寫給自己用的 Script 都會跳這個，點進階繼續就好。</span>
+      </div>
+      <div class="takeaway">
+        <span class="takeaway-idx">03</span>
+        <span>改了 Apps Script 程式碼，一定要重新部署（建立新版本）才會生效，光儲存是不夠的。</span>
+      </div>
+      <div class="takeaway">
+        <span class="takeaway-idx">04</span>
+        <span>把 HTML 放到 GitHub Pages 不只是為了分享，也是為了解決 CORS 問題——本機 file:// 開啟可能擋住 API 呼叫。</span>
+      </div>
+      <div class="takeaway">
+        <span class="takeaway-idx">05</span>
+        <span>一個 HTML 檔案 ＋ Apps Script ＋ Google Sheets，就能做到「資料庫 ＋ 跨裝置 ＋ 密碼保護」，不需要後端工程師，不需要付費服務。</span>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  JOJO Impact Hub · 以 Claude Code 協作製作 · 2026
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>製作說明｜外部 ESG 影響問卷 — JOJO Impact Hub</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='12' fill='%231e2d4a'/><text x='50' y='72' font-size='58' text-anchor='middle' fill='white' font-family='sans-serif'>叙</text></svg>">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", sans-serif;
+      background: #f5f5f3;
+      color: #1a1a1a;
+      line-height: 1.7;
+    }
+
+    /* ── Header ── */
+    header {
+      background: #fff;
+      border-bottom: 1px solid #e5e5e5;
+      padding: 0 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header-inner {
+      max-width: 800px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      height: 52px;
+    }
+    .back-link {
+      font-size: 0.85rem;
+      color: #888;
+      text-decoration: none;
+    }
+    .back-link:hover { color: #333; }
+    .header-sep { color: #ccc; }
+    .header-title { font-size: 0.85rem; color: #333; font-weight: 600; }
+
+    /* ── Hero ── */
+    .hero {
+      background: #fff;
+      border-bottom: 1px solid #e5e5e5;
+      padding: 2.5rem 2rem 2rem;
+    }
+    .hero-inner { max-width: 800px; margin: 0 auto; }
+    .hero-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+    .case-badge {
+      background: #1e2d4a;
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 700;
+      border-radius: 999px;
+      padding: 0.2rem 0.65rem;
+    }
+    .type-tag {
+      font-size: 0.7rem;
+      font-weight: 700;
+      border-radius: 4px;
+      padding: 0.15rem 0.5rem;
+      background: #ede8fd;
+      color: #6c3fc5;
+    }
+    .hero h1 {
+      font-size: 1.6rem;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.75rem;
+    }
+    .hero-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-bottom: 1rem;
+    }
+    .tag {
+      font-size: 0.72rem;
+      font-weight: 600;
+      border-radius: 4px;
+      padding: 0.15rem 0.55rem;
+    }
+    .tag-orange { color: #c05a00; border: 1px solid #f0b97a; }
+    .tag-blue   { color: #1a5fa8; border: 1px solid #8ab4e0; }
+    .tag-gray   { color: #555;    border: 1px solid #ccc; }
+    .hero-desc {
+      font-size: 0.95rem;
+      color: #555;
+      max-width: 640px;
+    }
+
+    /* ── Toc ── */
+    .toc-bar {
+      background: #fff;
+      border-bottom: 1px solid #e5e5e5;
+      padding: 0 2rem;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+    .toc-bar-inner {
+      max-width: 800px;
+      margin: 0 auto;
+      display: flex;
+      gap: 0;
+    }
+    .toc-bar a {
+      display: inline-block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #888;
+      text-decoration: none;
+      padding: 0.75rem 1rem;
+      border-bottom: 2px solid transparent;
+    }
+    .toc-bar a:hover { color: #333; border-bottom-color: #ccc; }
+
+    /* ── Main ── */
+    main {
+      max-width: 800px;
+      margin: 2.5rem auto;
+      padding: 0 2rem;
+    }
+
+    section { margin-bottom: 3rem; }
+
+    h2 {
+      font-size: 1.15rem;
+      font-weight: 800;
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid #e5e5e5;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    h2 .section-num {
+      background: #1e2d4a;
+      color: #fff;
+      font-size: 0.7rem;
+      border-radius: 4px;
+      padding: 0.1rem 0.4rem;
+    }
+
+    /* ── Pain Points ── */
+    .pain-list {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+    }
+    .pain-card {
+      background: #fff;
+      border: 1px solid #e5e5e5;
+      border-radius: 10px;
+      padding: 1rem 1.1rem;
+    }
+    .pain-card .pain-num {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: #c0392b;
+      margin-bottom: 0.35rem;
+    }
+    .pain-card p { font-size: 0.875rem; color: #444; }
+
+    /* ── Stages ── */
+    .stage-list { display: flex; flex-direction: column; gap: 0; }
+    .stage {
+      display: flex;
+      gap: 1.25rem;
+      position: relative;
+    }
+    .stage:not(:last-child)::before {
+      content: '';
+      position: absolute;
+      left: 17px;
+      top: 36px;
+      bottom: 0;
+      width: 2px;
+      background: #e5e5e5;
+    }
+    .stage-num {
+      flex-shrink: 0;
+      width: 36px;
+      height: 36px;
+      background: #1e2d4a;
+      color: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+    .stage-body { padding-bottom: 1.75rem; flex: 1; }
+    .stage-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 0.35rem;
+      padding-top: 0.4rem;
+    }
+    .stage-desc { font-size: 0.875rem; color: #555; }
+
+    /* ── Prompt Cards ── */
+    .prompt-card {
+      background: #fff;
+      border: 1px solid #e5e5e5;
+      border-radius: 10px;
+      margin-bottom: 1rem;
+      overflow: hidden;
+    }
+    .prompt-header {
+      background: #f8f8f6;
+      border-bottom: 1px solid #e5e5e5;
+      padding: 0.65rem 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .prompt-num {
+      font-size: 0.7rem;
+      font-weight: 700;
+      background: #1e2d4a;
+      color: #fff;
+      border-radius: 4px;
+      padding: 0.1rem 0.4rem;
+    }
+    .prompt-stage-tag {
+      font-size: 0.72rem;
+      color: #888;
+    }
+    .prompt-body {
+      padding: 1rem 1.1rem;
+    }
+    .prompt-quote {
+      background: #f3f0ff;
+      border-left: 3px solid #6c3fc5;
+      border-radius: 0 6px 6px 0;
+      padding: 0.75rem 1rem;
+      font-size: 0.875rem;
+      color: #333;
+      margin-bottom: 0.75rem;
+      font-style: italic;
+      line-height: 1.65;
+    }
+    .prompt-note {
+      font-size: 0.82rem;
+      color: #666;
+    }
+    .prompt-note strong { color: #1a1a1a; }
+
+    /* ── Pitfalls ── */
+    .pitfall {
+      background: #fff;
+      border: 1px solid #f0c0b8;
+      border-left: 4px solid #c0392b;
+      border-radius: 0 10px 10px 0;
+      padding: 1rem 1.1rem;
+      margin-bottom: 0.85rem;
+    }
+    .pitfall-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .pitfall-num {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: #c0392b;
+      background: #fde8e8;
+      border-radius: 4px;
+      padding: 0.1rem 0.4rem;
+    }
+    .pitfall-title { font-size: 0.9rem; font-weight: 700; }
+    .pitfall-body { font-size: 0.875rem; color: #555; }
+    .pitfall-body .label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-top: 0.5rem;
+      margin-bottom: 0.2rem;
+    }
+
+    /* ── Feature List ── */
+    .feature-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.6rem;
+    }
+    .feature-item {
+      background: #fff;
+      border: 1px solid #e5e5e5;
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      font-size: 0.875rem;
+      color: #444;
+      display: flex;
+      gap: 0.5rem;
+      align-items: flex-start;
+    }
+    .feature-dot {
+      width: 6px;
+      height: 6px;
+      background: #1e2d4a;
+      border-radius: 50%;
+      margin-top: 0.45rem;
+      flex-shrink: 0;
+    }
+
+    /* ── Takeaways ── */
+    .takeaway-list { display: flex; flex-direction: column; gap: 0.6rem; }
+    .takeaway {
+      background: #fff;
+      border: 1px solid #e5e5e5;
+      border-radius: 8px;
+      padding: 0.85rem 1rem;
+      font-size: 0.875rem;
+      color: #333;
+      display: flex;
+      gap: 0.75rem;
+    }
+    .takeaway-idx {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #888;
+      flex-shrink: 0;
+      padding-top: 0.05rem;
+    }
+
+    /* ── Footer ── */
+    footer {
+      text-align: center;
+      font-size: 0.75rem;
+      color: #aaa;
+      padding: 2rem 1rem;
+      border-top: 1px solid #e5e5e5;
+      margin-top: 2rem;
+    }
+
+    @media (max-width: 600px) {
+      main { padding: 0 1rem; }
+      header { padding: 0 1rem; }
+      .hero { padding: 1.5rem 1rem 1.5rem; }
+      .toc-bar { padding: 0 1rem; }
+      .pain-list { grid-template-columns: 1fr; }
+      .feature-grid { grid-template-columns: 1fr; }
+      .hero h1 { font-size: 1.25rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <a class="back-link" href="../index.html">← JOJO Impact Hub</a>
+    <span class="header-sep">/</span>
+    <span class="header-title">案 1 製作說明</span>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-meta">
+      <span class="case-badge">案 1</span>
+      <span class="type-tag">製作說明</span>
+    </div>
+    <h1>外部 ESG 影響問卷</h1>
+    <div class="hero-tags">
+      <span class="tag tag-blue">Claude Code</span>
+      <span class="tag tag-blue">Apps Script</span>
+      <span class="tag tag-orange">Google 表單</span>
+      <span class="tag tag-gray">五階段流程</span>
+      <span class="tag tag-gray">4 個踩雷紀錄</span>
+    </div>
+    <p class="hero-desc">
+      從「廠商平台不讓改字」出發，用 Claude Code 協作，最終做出一份完全自訂、字詞全掌控、自動收集回應的外部 ESG 影響問卷。全程不需自己寫一行程式碼。
+    </p>
+  </div>
+</div>
+
+<div class="toc-bar">
+  <div class="toc-bar-inner">
+    <a href="#background">背景</a>
+    <a href="#stages">製作流程</a>
+    <a href="#prompts">指令範本</a>
+    <a href="#pitfalls">踩雷紀錄</a>
+    <a href="#features">成品特色</a>
+    <a href="#takeaways">心得提醒</a>
+  </div>
+</div>
+
+<main>
+
+  <!-- ── 背景 ── -->
+  <section id="background">
+    <h2><span class="section-num">01</span> 背景與痛點</h2>
+    <div class="pain-list">
+      <div class="pain-card">
+        <div class="pain-num">痛點 1</div>
+        <p>委託平台固定用「衝擊」一詞，客戶要求改成「影響」，但平台說這是系統通用字詞、無法修改。</p>
+      </div>
+      <div class="pain-card">
+        <div class="pain-num">痛點 2</div>
+        <p>平台的三欄彩色版面（藍／綠／黃分類）是固定設計，無法客製化成客戶想要的樣式。</p>
+      </div>
+      <div class="pain-card">
+        <div class="pain-num">痛點 3</div>
+        <p>問卷共 17 題、每題 3-4 個子問項，要手動一題一題在 Google 表單拉超過 70 個欄位，費時且容易出錯。</p>
+      </div>
+      <div class="pain-card">
+        <div class="pain-num">痛點 4</div>
+        <p>問卷結構複雜：需要條件式欄位鎖住（選「否」就停用後續下拉）和「最多選 3 項」的自動驗證，一般平台做不到。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 製作流程 ── -->
+  <section id="stages">
+    <h2><span class="section-num">02</span> 五階段製作流程</h2>
+    <div class="stage-list">
+
+      <div class="stage">
+        <div class="stage-num">1</div>
+        <div class="stage-body">
+          <div class="stage-title">統一議題說明字數</div>
+          <div class="stage-desc">把 17 道議題的說明文字統一削減至接近 E1（104 字）的長度。提供 Google Doc 連結給 Claude，Claude 無法直接讀取，改為下載 .docx 上傳。Claude 自動計算每題字數、只削減超標的 10 題，保留原本已比基準短的 7 題。</div>
+        </div>
+      </div>
+
+      <div class="stage">
+        <div class="stage-num">2</div>
+        <div class="stage-body">
+          <div class="stage-title">評估 Google 表單可行性</div>
+          <div class="stage-desc">描述問卷的完整題型結構（條件欄位、下拉尺度、ESG 議題複選、分頁跳轉），問 Claude 能否做到。Claude 列出哪些可以 1:1 對應、哪些需要折衷（三欄彩色做不到、條件式鎖欄要改成分頁跳轉）。明確知道限制後，決定先用腳本建 Google 表單。</div>
+        </div>
+      </div>
+
+      <div class="stage">
+        <div class="stage-num">3</div>
+        <div class="stage-body">
+          <div class="stage-title">腳本批次建立問卷</div>
+          <div class="stage-desc">Claude 直接寫出一支 Google Apps Script，貼到 script.google.com 按執行，自動生成整份表單（17 題、每題 1-1／1-2／1-3、分頁跳轉、下拉、最多選 3 項驗證）。執行前有三個 TODO 要補：下拉的刻度選項、ESG 議題清單、負向題的「不可回復性」說明。</div>
+        </div>
+      </div>
+
+      <div class="stage">
+        <div class="stage-num">4</div>
+        <div class="stage-body">
+          <div class="stage-title">確認尺度定義與議題清單</div>
+          <div class="stage-desc">提供正式的五級頻率（10 年以上 1 次 → 每半年至少 1 次）和三級影響程度／範疇定義。重要發現：負向影響題（E4、E5）自動多一個「不可回復性」下拉，這是 GRI 雙重重大性的設計邏輯。另外補上完整的 26 項 ESG 議題清單（校務治理 10、環境永續 8、社會共融 8）。</div>
+        </div>
+      </div>
+
+      <div class="stage">
+        <div class="stage-num">5</div>
+        <div class="stage-body">
+          <div class="stage-title">升級為自訂 HTML 網頁表單</div>
+          <div class="stage-desc">客戶想要：單一頁面（不分頁）、選「否」就鎖住後續下拉、議題用可點選按鈕格式（選中反白）。這已超出 Google 表單原生能力。Claude 改用 Apps Script 網頁應用（Web App）直接建一份自訂 HTML 表單，版面、邏輯全部自訂，送出後自動寫入 Google 試算表收資料。</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── 指令範本 ── -->
+  <section id="prompts">
+    <h2><span class="section-num">03</span> 指令範本（可複製套用）</h2>
+
+    <div class="prompt-card">
+      <div class="prompt-header">
+        <span class="prompt-num">指令 1</span>
+        <span class="prompt-stage-tag">對應階段 1｜整理文件字數</span>
+      </div>
+      <div class="prompt-body">
+        <div class="prompt-quote">
+          「確認是否讀得到此雲端連結，請幫我將〔文件名稱〕所有的題目與說明獨立成一個文件檔存在同一個雲端資料夾，所有題目的說明以 E1 的說明字數為參考依據進行刪減」
+        </div>
+        <div class="prompt-note">
+          <strong>為什麼這樣說：</strong>先測試 Claude 能不能讀取連結，同時給出明確的基準（以 E1 為標準），不需要自己算字數。Claude 會自動找出哪些題太長、只刪必要的。
+        </div>
+      </div>
+    </div>
+
+    <div class="prompt-card">
+      <div class="prompt-header">
+        <span class="prompt-num">指令 2</span>
+        <span class="prompt-stage-tag">對應階段 2｜評估 Google 表單可行性</span>
+      </div>
+      <div class="prompt-body">
+        <div class="prompt-quote">
+          「這種題型，Google 表單你可以做得出來嗎？我們本來要用平台給他們，但是客戶不希望出現〔特定詞彙〕這兩個字，希望我們改成〔替代詞彙〕，但是平台的廠商說這個字不能改，因為這是普遍的用法，所以這是他們的功法，我們也可以理解，但是為了服膺客戶的需求，我們需要額外做表單給他們填」
+        </div>
+        <div class="prompt-note">
+          <strong>為什麼這樣說：</strong>先說清楚背景脈絡（為什麼要做、限制是什麼），Claude 才能幫你判斷哪條路可行，而不是直接問「怎麼做」。
+        </div>
+      </div>
+    </div>
+
+    <div class="prompt-card">
+      <div class="prompt-header">
+        <span class="prompt-num">指令 3</span>
+        <span class="prompt-stage-tag">對應階段 3｜描述完整題型結構</span>
+      </div>
+      <div class="prompt-body">
+        <div class="prompt-quote">
+          「在發生機率、影響程度、影響範疇下都有一個下拉式選單。然後總共有 10 幾個影響事件，一樣分成環境、經濟、人／人權影響三個面向。然後題目其實是問卷的正負向影響的題目。關於外部影響問卷（一樣有要避開特定詞彙的考量）。A. 發生機率、影響程度、影響範疇尺度確認：發生機率 1. 10 年以上發生 1 次以上…」
+        </div>
+        <div class="prompt-note">
+          <strong>為什麼這樣說：</strong>把題型結構、欄位邏輯、刻度選項全部在一則訊息說清楚，Claude 就能一次寫出可執行的腳本，不用來回確認細節。
+        </div>
+      </div>
+    </div>
+
+    <div class="prompt-card">
+      <div class="prompt-header">
+        <span class="prompt-num">指令 4</span>
+        <span class="prompt-stage-tag">對應階段 5｜要求升級為自訂 HTML</span>
+      </div>
+      <div class="prompt-body">
+        <div class="prompt-quote">
+          「能否提一個頁面，不要分兩個頁面。1-1 後直接接 1-2。若 1-2 選否，就讓他不能拉那幾題下拉選單。1-3 放在最後，然後以四欄位七列來放議題，就不要前面的那個三個面向，直接議題就好。可否讓他們用按的去選擇議題，選了之後可以反白呈現他們選了哪些」
+        </div>
+        <div class="prompt-note">
+          <strong>為什麼這樣說：</strong>直接描述你「看到的版面長什麼樣」，不需要說技術名詞。Claude 會判斷這些需求是否超出 Google 表單能力，並自動選擇正確的實作方式（這裡就升級成了自訂 HTML）。
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ── 踩雷紀錄 ── -->
+  <section id="pitfalls">
+    <h2><span class="section-num">04</span> 踩雷紀錄</h2>
+
+    <div class="pitfall">
+      <div class="pitfall-header">
+        <span class="pitfall-num">雷 1</span>
+        <span class="pitfall-title">Google Docs 連結 Claude 讀不到</span>
+      </div>
+      <div class="pitfall-body">
+        <div class="label">狀況</div>
+        Claude 可以連到 Google Docs 連結，但因為需要登入授權，讀不到文件內文，只能抓到標題與片段預覽。
+        <div class="label">修法</div>
+        把 Google Docs 下載成 .docx 檔案，上傳給 Claude 直接讀取。之後的修改也改成上傳本機檔案的方式操作。
+      </div>
+    </div>
+
+    <div class="pitfall">
+      <div class="pitfall-header">
+        <span class="pitfall-num">雷 2</span>
+        <span class="pitfall-title">Google 表單無法做「條件式欄位鎖住」</span>
+      </div>
+      <div class="pitfall-body">
+        <div class="label">狀況</div>
+        原本想用 Google 表單做「選否就鎖住後面幾個下拉」，但 Google 表單只能做分頁跳轉（選否跳過整頁），無法在同一頁即時鎖欄位。
+        <div class="label">修法</div>
+        先接受折衷版（選是才跳下一頁填程度評估），後來升級到自訂 HTML 才真正實現同頁條件式鎖欄。
+      </div>
+    </div>
+
+    <div class="pitfall">
+      <div class="pitfall-header">
+        <span class="pitfall-num">雷 3</span>
+        <span class="pitfall-title">三欄彩色版面 Google 表單做不出來</span>
+      </div>
+      <div class="pitfall-body">
+        <div class="label">狀況</div>
+        原平台有藍／綠／黃三欄分組的視覺設計，想在 Google 表單複製，但 Google 表單版面是單欄、不支援自訂 CSS。
+        <div class="label">修法</div>
+        改為「一題複選，每個選項前面加上【面向】標籤」的方式呈現分類。這樣系統的「最多選 3 項」驗證才能跨類別統一管控。
+      </div>
+    </div>
+
+    <div class="pitfall">
+      <div class="pitfall-header">
+        <span class="pitfall-num">雷 4</span>
+        <span class="pitfall-title">傳 HTML 檔案給同事，回應收不進來</span>
+      </div>
+      <div class="pitfall-body">
+        <div class="label">狀況</div>
+        把 HTML 表單檔案直接傳給同事填，結果送出的回應只下載到他們自己電腦，不會進你的 Google 試算表。HTML 檔案直接開是「預覽模式」。
+        <div class="label">修法</div>
+        把 Code.gs 部署成 Apps Script 網頁應用（Web App），拿到一個填寫網址（URL），用連結分享。連結點開就能填，回應自動存進 Google 試算表。
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ── 成品特色 ── -->
+  <section id="features">
+    <h2><span class="section-num">05</span> 成品特色</h2>
+    <div class="feature-grid">
+      <div class="feature-item"><span class="feature-dot"></span>字詞全掌控，全面使用「影響」取代「衝擊」</div>
+      <div class="feature-item"><span class="feature-dot"></span>17 道影響事件，涵蓋環境／人權／經濟三面向</div>
+      <div class="feature-item"><span class="feature-dot"></span>單一頁面不分頁，條件式欄位鎖住（選否停用）</div>
+      <div class="feature-item"><span class="feature-dot"></span>負向題自動多帶「不可回復性」維度（GRI 設計）</div>
+      <div class="feature-item"><span class="feature-dot"></span>四欄七列議題按鈕格，選中反白、最多選 3 項</div>
+      <div class="feature-item"><span class="feature-dot"></span>回應自動存入 Google 試算表，每位填答者 17 列</div>
+      <div class="feature-item"><span class="feature-dot"></span>以連結分享，手機電腦皆可填，不需安裝任何東西</div>
+      <div class="feature-item"><span class="feature-dot"></span>整份表單由腳本批次建立，不需手動拉 70+ 個欄位</div>
+    </div>
+  </section>
+
+  <!-- ── 心得 ── -->
+  <section id="takeaways">
+    <h2><span class="section-num">06</span> 心得提醒</h2>
+    <div class="takeaway-list">
+      <div class="takeaway">
+        <span class="takeaway-idx">01</span>
+        <span>廠商說「不能改」不等於真的不能改——用自建表單，字詞、版面、邏輯全部都是你的。</span>
+      </div>
+      <div class="takeaway">
+        <span class="takeaway-idx">02</span>
+        <span>先問「這個工具能不能做到」，讓 Claude 列出限制，再決定要折衷還是換工具，比直接動手做再踩雷省時很多。</span>
+      </div>
+      <div class="takeaway">
+        <span class="takeaway-idx">03</span>
+        <span>描述「你看到的版面長什麼樣」比描述「技術上要怎麼做」更有效——Claude 會自己判斷用什麼方法實現。</span>
+      </div>
+      <div class="takeaway">
+        <span class="takeaway-idx">04</span>
+        <span>傳 HTML 檔案只是讓人「預覽」，要真的收資料，一定要部署成 Apps Script 網頁應用，拿到 URL 再分享。</span>
+      </div>
+      <div class="takeaway">
+        <span class="takeaway-idx">05</span>
+        <span>這套流程（描述需求 → Claude 寫腳本 → 執行）可以套到任何需要批次建立複雜表單的場景，不限於 ESG 問卷。</span>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  JOJO Impact Hub · 以 Claude Code 協作製作 · 2026
+</footer>
+
+</body>
+</html>

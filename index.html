@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JOJO Impact Hub｜永續工具實驗室</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='12' fill='%231e2d4a'/><text x='50' y='72' font-size='58' text-anchor='middle' fill='white' font-family='sans-serif'>叙</text></svg>">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", sans-serif;
+      background: #f5f5f3;
+      color: #1a1a1a;
+      line-height: 1.6;
+    }
+
+    /* ── Header ── */
+    header {
+      background: #fff;
+      border-bottom: 1px solid #e5e5e5;
+      padding: 0 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header-inner {
+      max-width: 860px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      height: 56px;
+    }
+    .site-title {
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      color: #111;
+      text-decoration: none;
+    }
+    nav a {
+      font-size: 0.875rem;
+      color: #555;
+      text-decoration: none;
+      padding: 0.25rem 0;
+    }
+    nav a:hover { color: #111; }
+    nav a.active { color: #111; font-weight: 600; }
+
+    /* ── Hero ── */
+    .hero {
+      background: #fff;
+      border-bottom: 1px solid #e5e5e5;
+      padding: 3rem 2rem 2.5rem;
+      text-align: center;
+    }
+    .hero h1 {
+      font-size: 1.75rem;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.75rem;
+    }
+    .hero p {
+      font-size: 0.95rem;
+      color: #555;
+      max-width: 540px;
+      margin: 0 auto;
+    }
+
+    /* ── Main ── */
+    main {
+      max-width: 860px;
+      margin: 2.5rem auto;
+      padding: 0 2rem;
+    }
+
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: #888;
+      text-transform: uppercase;
+      margin-bottom: 1.25rem;
+    }
+
+    /* ── Card ── */
+    .case-group {
+      margin-bottom: 2.5rem;
+    }
+
+    .card {
+      background: #fff;
+      border: 1px solid #e5e5e5;
+      border-radius: 12px;
+      padding: 1.5rem 1.75rem;
+      margin-bottom: 0.75rem;
+      transition: box-shadow 0.15s;
+    }
+    .card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.07); }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .case-badge {
+      background: #1e2d4a;
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 700;
+      border-radius: 999px;
+      padding: 0.25rem 0.7rem;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .type-tag {
+      font-size: 0.7rem;
+      font-weight: 700;
+      border-radius: 4px;
+      padding: 0.15rem 0.5rem;
+      flex-shrink: 0;
+    }
+    .type-tag.product  { background: #fde8e8; color: #c0392b; }
+    .type-tag.process  { background: #ede8fd; color: #6c3fc5; }
+
+    .card-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #111;
+      flex: 1;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-bottom: 0.85rem;
+    }
+    .tag {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: #c05a00;
+      border: 1px solid #f0b97a;
+      border-radius: 4px;
+      padding: 0.15rem 0.55rem;
+    }
+    .tag.blue  { color: #1a5fa8; border-color: #8ab4e0; }
+    .tag.gray  { color: #555;    border-color: #ccc; }
+
+    .card-desc {
+      font-size: 0.875rem;
+      color: #444;
+      line-height: 1.65;
+      margin-bottom: 1rem;
+    }
+
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .card-date {
+      font-size: 0.75rem;
+      color: #999;
+      background: #f3f3f1;
+      border-radius: 6px;
+      padding: 0.2rem 0.65rem;
+    }
+
+    .card-link {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #1a5fa8;
+      text-decoration: none;
+      border: 1px solid #8ab4e0;
+      border-radius: 6px;
+      padding: 0.3rem 0.75rem;
+      transition: background 0.15s;
+    }
+    .card-link:hover { background: #eaf2fb; }
+
+    /* ── Coming Soon ── */
+    .coming-soon {
+      border: 2px dashed #e0e0e0;
+      background: #fafafa;
+      border-radius: 12px;
+      padding: 2rem;
+      text-align: center;
+      color: #aaa;
+      font-size: 0.875rem;
+      margin-bottom: 0.75rem;
+    }
+
+    /* ── Footer ── */
+    footer {
+      text-align: center;
+      font-size: 0.75rem;
+      color: #aaa;
+      padding: 2.5rem 1rem;
+      border-top: 1px solid #e5e5e5;
+      margin-top: 2rem;
+    }
+
+    @media (max-width: 600px) {
+      .hero h1 { font-size: 1.3rem; }
+      main { padding: 0 1rem; }
+      header { padding: 0 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <a class="site-title" href="#">JOJO Impact Hub</a>
+    <nav>
+      <a href="index.html" class="active">工具紀錄</a>
+      <a href="about.html">關於我們</a>
+    </nav>
+  </div>
+</header>
+
+<div class="hero">
+  <h1>永續工作的工具實驗室</h1>
+  <p>非工程師透過 Claude Code，解決真實永續工作問題的過程紀錄。<br>每個案子：是什麼、怎麼做、你也可以複製。</p>
+</div>
+
+<main>
+  <p class="section-label">工具紀錄</p>
+
+  <!-- ── 案 1：重大性評估問卷 ── -->
+  <div class="case-group">
+
+    <div class="card">
+      <div class="card-header">
+        <span class="case-badge">案 1</span>
+        <span class="type-tag product">成品</span>
+        <span class="card-title">重大性評估問卷（外部 ESG 衝擊）</span>
+      </div>
+      <div class="tags">
+        <span class="tag">Google Forms</span>
+        <span class="tag">問卷設計</span>
+        <span class="tag gray">ESG 重大性</span>
+      </div>
+      <p class="card-desc">
+        針對大學永續報告書的重大性評估，評量學校活動對外部環境、社會、經濟的正負面衝擊。共 15 題，涵蓋環境（E）、人（H）、經濟（C）三面向，供外部利害關係人填答。
+      </p>
+      <div class="card-footer">
+        <span class="card-date">最後修訂日：2026-05-27</span>
+        <a class="card-link" href="https://script.google.com/macros/s/AKfycbzXNNI9qkhkQMDjXMqnl_J4r3leeeLGd9fcvPmZeG7NCSSpYZIMRRZb_1DtXBjVhCeI1Q/exec" target="_blank">開啟問卷 →</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="case-badge">案 1</span>
+        <span class="type-tag process">製作說明</span>
+        <span class="card-title">重大性評估問卷（外部 ESG 衝擊）</span>
+      </div>
+      <div class="tags">
+        <span class="tag blue">Claude Code</span>
+        <span class="tag blue">Apps Script</span>
+        <span class="tag gray">五階段流程</span>
+      </div>
+      <p class="card-desc">
+        五階段製作流程：研究雙重重大性框架（GRI／ESRS）→ 草擬 15 道衝擊議題清單 → 逐題與顧問確認正負面方向 → 以自然語言描述需求讓 Claude Code 撰寫腳本 → 一鍵批次建立問卷全部題目與選項。含 3 段可複製的指令範本與 2 個踩雷紀錄，學完能套到任何「利害關係人衝擊評估問卷」場景。全程不需自己寫一行程式碼。
+      </p>
+      <div class="card-footer">
+        <span class="card-date">最後修訂日：2026-05-27</span>
+        <a class="card-link" href="cases/case-01-making.html">製作說明 →</a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── 案 2：永續活動搜集（Coming Soon）── -->
+  <div class="case-group">
+    <div class="coming-soon">
+      案 2｜永續活動搜集工具——製作中，即將上線
+    </div>
+  </div>
+
+  <!-- ── 案 4：辦公室許願牆 ── -->
+  <div class="case-group">
+
+    <div class="card">
+      <div class="card-header">
+        <span class="case-badge">案 4</span>
+        <span class="type-tag product">成品</span>
+        <span class="card-title">辦公室許願牆</span>
+      </div>
+      <div class="tags">
+        <span class="tag">Firebase</span>
+        <span class="tag">Firestore</span>
+        <span class="tag gray">即時同步</span>
+        <span class="tag gray">多人共用</span>
+      </div>
+      <p class="card-desc">
+        留下暱稱與心願，即時顯示所有人的留言（最新在上）。資料存在 Firebase Firestore，任何人送出留言，所有開著頁面的人立刻看到，不需重新整理。日式文青風格，單一 HTML 檔案部署於 Firebase Hosting。
+      </p>
+      <div class="card-footer">
+        <span class="card-date">上線日：2026-06-13</span>
+        <a class="card-link" href="https://office-wish.web.app" target="_blank">開啟許願牆 →</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="case-badge">案 4</span>
+        <span class="type-tag process">製作說明</span>
+        <span class="card-title">辦公室許願牆</span>
+      </div>
+      <div class="tags">
+        <span class="tag blue">Codex</span>
+        <span class="tag blue">Firebase</span>
+        <span class="tag blue">Firebase Hosting</span>
+        <span class="tag gray">四步上線</span>
+      </div>
+      <p class="card-desc">
+        四步上線流程：Codex 生成程式碼框架 → 建立 Firebase 專案與 Firestore → 把 Firebase 設定貼給 AI 串接 → Firebase CLI 登入部署。全程不寫一行程式碼，從零到有網址約 30 分鐘。含 3 段指令範本與 3 個踩雷紀錄，學完可套到任何需要「多人即時共享資料」的場景。
+      </p>
+      <div class="card-footer">
+        <span class="card-date">2026-06-13</span>
+        <a class="card-link" href="cases/case-04-making.html">製作說明 →</a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── 案 3：郵件寄送登記系統 ── -->
+  <div class="case-group">
+
+    <div class="card">
+      <div class="card-header">
+        <span class="case-badge">案 3</span>
+        <span class="type-tag product">成品</span>
+        <span class="card-title">郵件寄送登記系統</span>
+      </div>
+      <div class="tags">
+        <span class="tag">Apps Script</span>
+        <span class="tag">Google Sheets</span>
+        <span class="tag gray">跨裝置同步</span>
+        <span class="tag gray">密碼保護</span>
+      </div>
+      <p class="card-desc">
+        追蹤合約、文件的郵件寄送紀錄。廠商與窗口下拉自動帶入 email 和電話，對方用印狀態三階段追蹤，資料存在 Google Sheets 跨裝置同步，前端密碼保護。單一 HTML 檔案，無需安裝，打開網址即用。
+      </p>
+      <div class="card-footer">
+        <span class="card-date">最後修訂日：2026-06-10</span>
+        <a class="card-link" href="https://jojo-impact-hub.github.io/jojo-doclog.html" target="_blank">開啟工具 →</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="case-badge">案 3</span>
+        <span class="type-tag process">製作說明</span>
+        <span class="card-title">郵件寄送登記系統</span>
+      </div>
+      <div class="tags">
+        <span class="tag blue">Claude Code</span>
+        <span class="tag blue">Apps Script</span>
+        <span class="tag blue">GitHub Pages</span>
+        <span class="tag gray">六階段流程</span>
+      </div>
+      <p class="card-desc">
+        六階段製作流程：從 localStorage 限制出發 → 評估跨裝置架構 → 建立 Apps Script 後端 → HTML 前端串接 API → 上傳 GitHub Pages 解決 CORS → 加入密碼保護。含 4 段指令範本與 3 個踩雷紀錄，一個 HTML 檔案串上 Apps Script，就能做到資料庫＋跨裝置＋密碼保護，不需後端工程師。
+      </p>
+      <div class="card-footer">
+        <span class="card-date">最後修訂日：2026-06-11</span>
+        <a class="card-link" href="cases/case-03-making.html">製作說明 →</a>
+      </div>
+    </div>
+
+  </div>
+
+</main>
+
+<footer>
+  JOJO Impact Hub · 以 Claude Code 協作製作 · 2026
+</footer>
+
+</body>
+</html>
